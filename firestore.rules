@@ -1,50 +1,107 @@
 rules_version = '2';
 
+// ═══════════════════════════════════════════════════════════════════════════════
+// CHOCO STORE TIMIKA — Firestore Security Rules
+//
+// Strategi keamanan:
+// - Data publik (produk, galeri, konten) hanya bisa dibaca oleh semua orang.
+// - Operasi tulis (tambah, ubah, hapus) HANYA untuk administrator berdasarkan UID.
+// - Validasi UID dilakukan server-side oleh Firebase — tidak bisa dipalsukan.
+//
+// Admin UID: eHVsfeGtEaXpGy1ARzW79uLmHJt1
+// Catatan: Menggunakan UID langsung (bukan Custom Claims) agar kompatibel dengan
+// Firebase Spark Plan tanpa memerlukan Cloud Functions.
+// ═══════════════════════════════════════════════════════════════════════════════
+
 service cloud.firestore {
   match /databases/{database}/documents {
 
-    // ─── HELPER FUNCTIONS ───────────────────────────────────────────────
-    function isAdmin() {
-      return request.auth != null
-        && request.auth.token.admin == true;
-    }
+    // ── Helper Functions ──────────────────────────────────────────────────────
 
+    // Cek apakah pengguna sudah login
     function isAuthenticated() {
       return request.auth != null;
     }
 
-    // ─── PRODUCTS (Publik baca, Admin tulis) ────────────────────────────
-    match /products/{productId} {
-      allow read: if true;
-      allow create, update, delete: if isAdmin();
+    // Cek apakah pengguna adalah administrator berdasarkan UID
+    // UID divalidasi oleh Firebase Auth — tidak bisa dimanipulasi dari frontend
+    function isAdmin() {
+      return isAuthenticated()
+          && request.auth.uid == 'eHVsfeGtEaXpGy1ARzW79uLmHJt1';
     }
 
-    // ─── CONFIG (Publik baca, Admin tulis) ──────────────────────────────
+    // Validasi field string tidak kosong dan tidak terlalu panjang
+    function isValidString(value, maxLen) {
+      return value is string && value.size() > 0 && value.size() <= maxLen;
+    }
+
+    // ── Koleksi: products ─────────────────────────────────────────────────────
+    // Siapa pun bisa membaca produk (untuk website publik)
+    // Hanya admin yang bisa menambah, mengubah, atau menghapus produk
+    match /products/{productId} {
+      allow read: if true;
+
+      allow create: if isAdmin()
+        && isValidString(request.resource.data.name, 200)
+        && request.resource.data.name is string
+        && request.resource.data.category in ['dark', 'milk', 'white', 'gift', 'baking']
+        && request.resource.data.available is bool
+        && request.resource.data.featured is bool
+        && request.resource.data.order is number;
+
+      allow update: if isAdmin()
+        && (
+          !('name' in request.resource.data)
+          || isValidString(request.resource.data.name, 200)
+        )
+        && (
+          !('category' in request.resource.data)
+          || request.resource.data.category in ['dark', 'milk', 'white', 'gift', 'baking']
+        );
+
+      allow delete: if isAdmin();
+    }
+
+    // ── Koleksi: config ────────────────────────────────────────────────────────
+    // Konfigurasi toko: brand, contact, hours, seo, hero, about
+    // Semua bisa dibaca (dibutuhkan website publik)
+    // Hanya admin yang bisa mengubah
     match /config/{document} {
       allow read: if true;
       allow write: if isAdmin();
     }
 
-    // ─── GALLERY (Publik baca, Admin tulis) ─────────────────────────────
+    // ── Koleksi: gallery ───────────────────────────────────────────────────────
+    // Item galeri: foto produk, suasana toko
     match /gallery/{itemId} {
       allow read: if true;
-      allow write: if isAdmin();
+
+      allow create: if isAdmin()
+        && request.resource.data.imageUrl is string
+        && request.resource.data.order is number;
+
+      allow update: if isAdmin();
+      allow delete: if isAdmin();
     }
 
-    // ─── CONTENT (Publik baca, Admin tulis) ─────────────────────────────
+    // ── Koleksi: content ───────────────────────────────────────────────────────
+    // Konten editorial: hero, about, wholesale, why-us
     match /content/{document} {
       allow read: if true;
       allow write: if isAdmin();
     }
 
-    // ─── ADMIN LOGS (Admin only) ─────────────────────────────────────────
+    // ── Koleksi: admin_logs ────────────────────────────────────────────────────
+    // Log aktivitas admin — hanya admin yang bisa baca dan tulis
     match /admin_logs/{logId} {
       allow read, write: if isAdmin();
     }
 
-    // ─── DEFAULT: Tolak semua akses lain ─────────────────────────────────
+    // ── Default: Tolak semua akses yang tidak tercakup di atas ────────────────
+    // PENTING: Ini mencegah akses ke koleksi yang belum didefinisikan secara eksplisit
     match /{document=**} {
       allow read, write: if false;
     }
+
   }
 }
