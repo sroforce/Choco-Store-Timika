@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Choco Store Timika — Toko &amp; Gudang Cokelat Premium</title>
+<meta name="description" content="Choco Store Timika menyediakan berbagai pilihan cokelat premium untuk kebutuhan eceran maupun grosir di Timika, Papua, Indonesia.">
+<meta name="keywords" content="toko cokelat Timika,gudang cokelat Timika,cokelat grosir Timika,toko cokelat Papua,wholesale cokelat Papua">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Choco Store Timika — Premium Chocolate Store &amp; Wholesale">
+<meta property="og:description" content="Toko dan gudang cokelat premium di Timika, Papua. Melayani pembelian eceran dan grosir.">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--cc:#2B1712;--cd:#3A211B;--cb:#593629;--cg:#C79552;--cgl:#D4A86A;--cr:#F7F1E8;--cbe:#E8DCCB;--ff:'Plus Jakarta Sans',system-ui,sans-serif;--fd:'Playfair Display',Georgia,serif;--t:.3s cubic-bezier(.4,0,.2,1)}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--ff);background:var(--cc);color:var(--cr);overflow-x:hidden}
+h1,h2,h3,h4{font-family:var(--fd);line-height:1.1}
+p{line-height:1.72}
+a{text-decoration:none;color:inherit}
+.wrap{max-width:1200px;margin:0 auto;padding:0 1.5rem}
+.sec{padding:7rem 0}
+.lbl{font-size:.72rem;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--cg);display:block;margin-bottom:1rem}
+.lbl-d{color:var(--cb)}
+.btn{display:inline-flex;align-items:center;gap:.5rem;padding:.85rem 2rem;border-radius:3px;font-family:var(--ff);font-size:.9rem;font-weight:600;cursor:pointer;transition:all var(--t);border:none;white-space:nowrap}
+.btn-g{background:var(--cg);color:var(--cc)}.btn-g:hover{background:var(--cgl);transform:translateY(-2px)}
+.btn-o{background:transparent;border:1.5px solid rgba(247,241,232,.35);color:var(--cr)}.btn-o:hover{background:rgba(247,241,232,.1);border-color:var(--cr)}
+.btn-og{background:transparent;border:1.5px solid var(--cg);color:var(--cg)}.btn-og:hover{background:var(--cg);color:var(--cc)}
+.rv{opacity:0;transform:translateY(28px);transition:opacity .7s cubic-bezier(.4,0,.2,1),transform .7s cubic-bezier(.4,0,.2,1)}.rv.in{opacity:1;transform:none}
+.d1{transition-delay:.1s}.d2{transition-delay:.2s}.d3{transition-delay:.3s}
+
+/* NAV */
+#nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:1.5rem 0;transition:all var(--t)}
+#nav.sc{background:rgba(43,23,18,.96);backdrop-filter:blur(16px);padding:.9rem 0;border-bottom:1px solid rgba(199,149,82,.12)}
+.ni{display:flex;align-items:center;justify-content:space-between}
+.logo{display:flex;align-items:baseline;gap:.25rem;font-family:var(--fd);font-size:1.3rem;font-weight:700}
+.lg{color:var(--cg);font-style:italic}
+.ll{font-family:var(--ff);font-size:.68rem;color:rgba(247,241,232,.4);letter-spacing:.05em;margin-left:.35rem;align-self:center}
+.nl{display:flex;align-items:center;gap:2.25rem;list-style:none}
+.nl a{font-size:.82rem;font-weight:500;color:rgba(247,241,232,.75);transition:color var(--t)}
+.nl a:hover,.nl a.on{color:var(--cr)}
+.nc{padding:.55rem 1.4rem!important;background:var(--cg);color:var(--cc)!important;border-radius:3px;font-weight:600!important}
+.nc:hover{background:var(--cgl)!important;color:var(--cc)!important}
+.hb{display:none;flex-direction:column;gap:5px;cursor:pointer;background:none;border:none;padding:.4rem;z-index:1001;position:relative}
+.hb span{width:22px;height:1.5px;background:var(--cr);display:block;transition:all var(--t);transform-origin:center}
+.hb.op span:nth-child(1){transform:translateY(6.5px) rotate(45deg)}
+.hb.op span:nth-child(2){opacity:0;transform:scaleX(0)}
+.hb.op span:nth-child(3){transform:translateY(-6.5px) rotate(-45deg)}
+#mn{display:none;position:fixed;inset:0;background:rgba(27,13,9,.98);z-index:999;flex-direction:column;align-items:center;justify-content:center;gap:2.5rem}
+#mn.op{display:flex}
+#mn a{font-family:var(--fd);font-size:2.2rem;color:rgba(247,241,232,.8);transition:color var(--t)}
+#mn a:hover{color:var(--cg)}
+#mn .nc{font-family:var(--ff)!important;font-size:1rem!important;padding:.85rem 2.5rem!important;border-radius:3px}
+
+/* HERO */
+#home{min-height:100svh;display:flex;align-items:center;background:var(--cc);padding:8rem 0 5rem;overflow:hidden;position:relative}
+.hbg{position:absolute;inset:0;background:radial-gradient(ellipse 60% 80% at 75% 55%,rgba(89,54,41,.5) 0%,transparent 65%),radial-gradient(ellipse 40% 50% at 15% 85%,rgba(199,149,82,.07) 0%,transparent 55%);pointer-events:none}
+.hgrid{display:grid;grid-template-columns:1fr 1fr;align-items:center;gap:5rem;position:relative;z-index:1}
+.hey{font-size:.72rem;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--cg);display:flex;align-items:center;gap:.75rem;margin-bottom:1.75rem}
+.hey::before{content:'';width:32px;height:1.5px;background:var(--cg);flex-shrink:0}
+.hh1{font-size:clamp(3rem,5.5vw,5.75rem);font-weight:900;color:var(--cr);line-height:1;margin-bottom:1.75rem}
+.hh1 em{font-style:italic;color:var(--cg);display:block}
+.hdesc{font-size:1rem;color:rgba(247,241,232,.65);max-width:44ch;line-height:1.75;margin-bottom:2.5rem}
+.hact{display:flex;gap:1rem;flex-wrap:wrap;margin-bottom:3.5rem}
+.hmeta{display:flex;align-items:center;gap:1.75rem;padding-top:2.5rem;border-top:1px solid rgba(199,149,82,.18)}
+.hmeta span{font-size:.78rem;font-weight:500;color:rgba(247,241,232,.45)}
+.hmdot{width:3px;height:3px;border-radius:50%;background:rgba(199,149,82,.4);flex-shrink:0}
+.hvis{display:flex;align-items:center;justify-content:center}
+.orw{position:relative;width:420px;height:420px}
+.orb{width:100%;height:100%;border-radius:50%;background:radial-gradient(circle at 32% 30%,#C79552 0%,#9B5B35 18%,#593629 42%,#3A211B 68%,#2B1712 100%);box-shadow:0 50px 120px rgba(0,0,0,.75),inset 0 1px 0 rgba(199,149,82,.55)}
+.orb::before{content:'';position:absolute;inset:11%;border-radius:50%;background:radial-gradient(circle at 42% 38%,rgba(199,149,82,.45) 0%,transparent 62%)}
+.orb::after{content:'';position:absolute;top:13%;left:20%;width:30%;height:18%;border-radius:50%;background:rgba(255,255,255,.18);transform:rotate(-25deg);filter:blur(10px)}
+.or1{position:absolute;inset:-20px;border-radius:50%;border:1px solid rgba(199,149,82,.18);pointer-events:none}
+.or2{position:absolute;inset:-44px;border-radius:50%;border:1px solid rgba(199,149,82,.07);pointer-events:none}
+.orl{position:absolute;bottom:-3rem;left:50%;transform:translateX(-50%);font-size:.68rem;letter-spacing:.3em;text-transform:uppercase;color:rgba(199,149,82,.55);white-space:nowrap}
+
+/* ABOUT */
+#about{background:var(--cr);color:var(--cc)}
+.agrid{display:grid;grid-template-columns:1fr 1.1fr;gap:6rem;align-items:center}
+.aimg{aspect-ratio:4/5;border-radius:4px;background:radial-gradient(ellipse at 30% 25%,#C79552 0%,#8B4B2F 25%,#593629 55%,#2B1712 100%);display:flex;align-items:flex-end;padding:1.5rem}
+.aimgl{font-size:.68rem;letter-spacing:.15em;text-transform:uppercase;color:rgba(247,241,232,.5)}
+.ah2{font-size:clamp(2rem,3.5vw,3.25rem);color:var(--cc);margin-bottom:1.5rem}
+.ap{font-size:.97rem;color:rgba(43,23,18,.72);margin-bottom:1.25rem}
+.apts{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-top:2.5rem;padding-top:2.5rem;border-top:1px solid rgba(43,23,18,.1)}
+.apt-t{font-family:var(--fd);font-size:1.1rem;color:var(--cc);margin-bottom:.35rem}
+.apt-d{font-size:.82rem;color:rgba(43,23,18,.6);line-height:1.6}
+
+/* PRODUCTS */
+#products{background:var(--cd)}
+.phdr{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:3rem;gap:2rem;flex-wrap:wrap}
+.ph2{font-size:clamp(2rem,3.5vw,3rem);color:var(--cr)}
+.fbar{display:flex;gap:.5rem;flex-wrap:wrap}
+.fbtn{padding:.5rem 1.1rem;border-radius:2px;border:1px solid rgba(199,149,82,.25);background:transparent;color:rgba(247,241,232,.6);font-family:var(--ff);font-size:.8rem;font-weight:500;cursor:pointer;transition:all var(--t)}
+.fbtn:hover{border-color:var(--cg);color:var(--cr)}
+.fbtn.on{background:var(--cg);border-color:var(--cg);color:var(--cc);font-weight:600}
+.pfeat{background:rgba(43,23,18,.5);border:1px solid rgba(199,149,82,.12);border-radius:4px;overflow:hidden;margin-bottom:1.5rem;display:grid;grid-template-columns:1fr 1fr;transition:all var(--t)}
+.pfeat:hover{border-color:rgba(199,149,82,.4);box-shadow:0 20px 50px rgba(0,0,0,.35)}
+.pfeat .pi{height:100%;min-height:320px}
+.pgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem}
+.pc{background:rgba(43,23,18,.5);border:1px solid rgba(199,149,82,.1);border-radius:4px;overflow:hidden;transition:all var(--t)}
+.pc:hover{border-color:rgba(199,149,82,.4);transform:translateY(-3px);box-shadow:0 20px 50px rgba(0,0,0,.35)}
+.pi{position:relative;overflow:hidden}
+.pgrid .pi{height:200px}
+.pia{position:absolute;inset:0}
+.pbdg{position:absolute;top:1rem;left:1rem;background:var(--cg);color:var(--cc);font-size:.67rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:.3rem .7rem;border-radius:2px}
+.pinfo{padding:1.5rem}
+.pcat{font-size:.68rem;font-weight:600;letter-spacing:.15em;text-transform:uppercase;color:var(--cg);margin-bottom:.6rem}
+.pname{font-family:var(--fd);font-size:1.15rem;color:var(--cr);margin-bottom:.6rem;line-height:1.25}
+.pdesc{font-size:.82rem;color:rgba(247,241,232,.55);line-height:1.6;margin-bottom:1.25rem}
+.pft{display:flex;justify-content:space-between;align-items:center;padding-top:1rem;border-top:1px solid rgba(199,149,82,.12)}
+.pp{font-size:.75rem;color:rgba(247,241,232,.4);font-style:italic}
+.pfeat-info{padding:3rem}
+.pfeat-info .pcat{font-size:.75rem;margin-bottom:.75rem}
+.pfeat-info .pname{font-size:1.6rem;margin-bottom:1rem}
+.pfeat-info .pdesc{font-size:.92rem;margin-bottom:2rem}
+.pfeat-info .pft{margin-top:auto;border-top:1px solid rgba(199,149,82,.12);padding-top:1.5rem}
+
+/* WHOLESALE */
+#wholesale{background:var(--cr)}
+.wh2{font-size:clamp(2rem,3.5vw,3rem);color:var(--cc);text-align:center;margin-bottom:1rem}
+.wsub{text-align:center;color:rgba(43,23,18,.65);margin-bottom:4rem;max-width:50ch;margin-left:auto;margin-right:auto}
+.wgrid{display:grid;grid-template-columns:1fr 1fr;gap:2rem}
+.wc{border-radius:4px;padding:3rem 2.5rem}
+.wcr{background:var(--cbe);border:1px solid rgba(89,54,41,.12)}
+.wcw{background:var(--cd);border:1px solid rgba(199,149,82,.2);color:var(--cr)}
+.wi{width:48px;height:48px;border-radius:50%;display:flex;align-items:center;justify-content:center;margin-bottom:1.75rem}
+.wir{background:rgba(89,54,41,.12)}
+.wiw{background:rgba(199,149,82,.15)}
+.wt{font-family:var(--fd);font-size:1.75rem;margin-bottom:.75rem}
+.wtr{color:var(--cc)}.wtw{color:var(--cr)}
+.wd{font-size:.95rem;margin-bottom:1.75rem}
+.wdr{color:rgba(43,23,18,.7)}.wdw{color:rgba(247,241,232,.7)}
+.wl{list-style:none;display:flex;flex-direction:column;gap:.65rem;margin-bottom:2rem}
+.wl li{display:flex;align-items:center;gap:.75rem;font-size:.88rem}
+.wlr li{color:rgba(43,23,18,.75)}.wlw li{color:rgba(247,241,232,.75)}
+.wck{width:18px;height:18px;border-radius:50%;background:var(--cg);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+
+/* WHY US */
+#why{background:var(--cc)}
+.why-h{text-align:center;margin-bottom:4rem}
+.wh2t{font-size:clamp(2rem,3.5vw,3rem);color:var(--cr);margin-bottom:1rem}
+.ws{color:rgba(247,241,232,.6);max-width:48ch;margin:0 auto}
+.wgr{display:grid;grid-template-columns:repeat(2,1fr);gap:1.5rem;max-width:900px;margin:0 auto}
+.wi2{padding:2.5rem 2rem;border:1px solid rgba(199,149,82,.1);border-radius:4px;transition:border-color var(--t)}
+.wi2:hover{border-color:rgba(199,149,82,.3)}
+.wico{width:44px;height:44px;margin-bottom:1.25rem;color:var(--cg)}
+.wti{font-family:var(--fd);font-size:1.25rem;color:var(--cr);margin-bottom:.6rem}
+.wde{font-size:.88rem;color:rgba(247,241,232,.6);line-height:1.65}
+
+/* GALLERY */
+#gallery{background:var(--cr)}
+.gh2{font-size:clamp(2rem,3.5vw,3rem);color:var(--cc);text-align:center;margin-bottom:.75rem}
+.gsub{text-align:center;color:rgba(43,23,18,.65);margin-bottom:3.5rem}
+.gg{columns:3;column-gap:1rem}
+.gi{break-inside:avoid;margin-bottom:1rem;border-radius:4px;overflow:hidden;position:relative;cursor:pointer}
+.gi:hover .gov{opacity:1}
+.ga{width:100%;display:block}
+.gov{position:absolute;inset:0;background:rgba(27,13,9,.7);display:flex;align-items:flex-end;padding:1.25rem;opacity:0;transition:opacity var(--t)}
+.gl{font-size:.72rem;font-weight:600;letter-spacing:.15em;text-transform:uppercase;color:rgba(247,241,232,.85)}
+
+/* CONTACT */
+#contact{background:var(--cc)}
+.cgrid{display:grid;grid-template-columns:1fr 1.2fr;gap:6rem;align-items:start}
+.ch2{font-size:clamp(2rem,3.5vw,3rem);color:var(--cr);margin-bottom:1rem}
+.cdesc{color:rgba(247,241,232,.65);margin-bottom:3rem}
+.citems{display:flex;flex-direction:column;gap:2rem}
+.cit{display:flex;gap:1.25rem;align-items:flex-start}
+.cic{width:42px;height:42px;border:1px solid rgba(199,149,82,.25);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;color:var(--cg)}
+.clb{font-size:.7rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:rgba(199,149,82,.7);margin-bottom:.3rem}
+.cv{font-size:.92rem;color:rgba(247,241,232,.8);line-height:1.5}
+.cv em{font-style:italic;color:rgba(247,241,232,.4);font-size:.82rem}
+.mapp{background:var(--cd);border:1px solid rgba(199,149,82,.12);border-radius:4px;height:220px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.75rem;color:rgba(247,241,232,.35);font-size:.82rem;margin-bottom:1.5rem;text-align:center;padding:2rem}
+.wac{display:flex;align-items:center;gap:1rem;background:rgba(37,211,102,.12);border:1px solid rgba(37,211,102,.3);border-radius:4px;padding:1.75rem 2rem;cursor:pointer;transition:all var(--t)}
+.wac:hover{background:rgba(37,211,102,.2);border-color:rgba(37,211,102,.5);transform:translateY(-2px)}
+.wac-t{font-family:var(--fd);font-size:1.25rem;color:var(--cr);margin-bottom:.2rem}
+.wac-s{font-size:.82rem;color:rgba(247,241,232,.55)}
+
+/* FOOTER */
+footer{background:#1A0C09;padding:5rem 0 2rem}
+.fg{display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:4rem;padding-bottom:3rem;border-bottom:1px solid rgba(199,149,82,.1);margin-bottom:2rem}
+.fdesc{font-size:.85rem;color:rgba(247,241,232,.5);line-height:1.7;max-width:36ch;margin:.85rem 0 0}
+.ftit{font-size:.7rem;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:rgba(199,149,82,.7);margin-bottom:1.25rem}
+.fl{list-style:none;display:flex;flex-direction:column;gap:.7rem}
+.fl a{font-size:.85rem;color:rgba(247,241,232,.5);transition:color var(--t)}.fl a:hover{color:var(--cr)}
+.fct{display:flex;flex-direction:column;gap:.75rem}
+.fct span{font-size:.82rem;color:rgba(247,241,232,.45);display:flex;align-items:center;gap:.6rem}
+.fbot{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem}
+.fcp{font-size:.78rem;color:rgba(247,241,232,.3)}
+
+#btt{position:fixed;bottom:2rem;right:2rem;width:44px;height:44px;background:var(--cg);border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;border:none;opacity:0;transform:translateY(10px);transition:all var(--t);z-index:100;color:var(--cc)}
+#btt.sh{opacity:1;transform:none}
+#btt:hover{background:var(--cgl);transform:translateY(-2px)}
+
+@media(max-width:1024px){.orw{width:340px;height:340px}.fg{grid-template-columns:1fr 1fr}.fg>:first-child{grid-column:1/-1}}
+@media(max-width:900px){
+  .hgrid{grid-template-columns:1fr;gap:3rem;text-align:center}
+  .hey{justify-content:center}.hdesc{margin:0 auto 2.5rem}.hact{justify-content:center}.hmeta{justify-content:center}
+  .hvis{order:-1}.orw{width:260px;height:260px}
+  .agrid{grid-template-columns:1fr;gap:3rem}.aimg{aspect-ratio:16/9}
+  .phdr{flex-direction:column;align-items:flex-start}
+  .pfeat{grid-template-columns:1fr}.pfeat .pi{min-height:220px}
+  .pgrid{grid-template-columns:repeat(2,1fr)}
+  .wgrid{grid-template-columns:1fr}
+  .wgr{grid-template-columns:1fr;max-width:500px}
+  .gg{columns:2}
+  .cgrid{grid-template-columns:1fr;gap:3rem}
+  .fg{grid-template-columns:1fr;gap:2.5rem}
+  .hb{display:flex}.nl{display:none}
+}
+@media(max-width:600px){
+  .pgrid{grid-template-columns:1fr}.gg{columns:1}
+  .apts{grid-template-columns:1fr}.hact{flex-direction:column}
+  .hact .btn{justify-content:center}.fbot{flex-direction:column;text-align:center}
+  .sec{padding:5rem 0}
+}
+:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body::before{content:'';position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);background:transparent;z-index:10}
+</style>
+</head>
+<body>
+
+<nav id="nav">
+<div class="wrap"><div class="ni">
+  <a href="#home" class="logo">Choco<span class="lg">Store</span><span class="ll">Timika</span></a>
+  <ul class="nl">
+    <li><a href="#home">Home</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#products">Products</a></li>
+    <li><a href="#wholesale">Wholesale</a></li>
+    <li><a href="#gallery">Gallery</a></li>
+    <li><a href="#contact">Contact</a></li>
+    <li><a href="#contact" class="nc">WhatsApp</a></li>
+  </ul>
+  <button class="hb" id="hb" aria-label="Menu"><span></span><span></span><span></span></button>
+</div></div>
+</nav>
+
+<div id="mn" role="dialog" aria-label="Navigation">
+  <a href="#home" class="ml">Home</a>
+  <a href="#about" class="ml">About</a>
+  <a href="#products" class="ml">Products</a>
+  <a href="#wholesale" class="ml">Wholesale</a>
+  <a href="#gallery" class="ml">Gallery</a>
+  <a href="#contact" class="ml">Contact</a>
+  <a href="#contact" class="nc ml">WhatsApp</a>
+</div>
+
+<main>
+
+<!-- HERO -->
+<section id="home">
+  <div class="hbg"></div>
+  <div class="wrap"><div class="hgrid">
+    <div>
+      <p class="hey">Premium Chocolate Store &amp; Wholesale</p>
+      <h1 class="hh1">Discover Your<br><em>Chocolate</em>Experience.</h1>
+      <p class="hdesc">Temukan berbagai pilihan cokelat premium untuk kebutuhan pribadi, bisnis, maupun pembelian dalam jumlah besar bersama Choco Store Timika.</p>
+      <div class="hact">
+        <a href="#products" class="btn btn-g">Jelajahi Produk</a>
+        <a href="#contact" class="btn btn-o">Hubungi Kami</a>
+      </div>
+      <div class="hmeta">
+        <span>Retail &amp; Grosir</span><div class="hmdot"></div>
+        <span>Berbagai Merek Premium</span><div class="hmdot"></div>
+        <span>Timika, Papua</span>
+      </div>
+    </div>
+    <div class="hvis"><div class="orw">
+      <div class="orb"></div>
+      <div class="or1"></div><div class="or2"></div>
+      <p class="orl">Premium Chocolate Collection</p>
+    </div></div>
+  </div></div>
+</section>
+
+<!-- ABOUT -->
+<section id="about" class="sec">
+<div class="wrap"><div class="agrid">
+  <div class="rv">
+    <div class="aimg"><span class="aimgl">Foto Toko</span></div>
+  </div>
+  <div>
+    <span class="lbl lbl-d rv">Tentang Kami</span>
+    <h2 class="ah2 rv">Mitra Cokelat Premium Anda di Timika</h2>
+    <p class="ap rv d1">Choco Store Timika hadir sebagai toko dan gudang cokelat yang menyediakan beragam pilihan produk cokelat berkualitas untuk masyarakat Timika dan sekitarnya, Papua.</p>
+    <p class="ap rv d2">Kami melayani pembelian eceran untuk konsumsi pribadi hingga pembelian grosir bagi pelaku usaha, reseller, dan korporat — dengan berbagai merek pilihan yang dapat disesuaikan dengan kebutuhan Anda.</p>
+    <div class="apts rv d3">
+      <div><p class="apt-t">Eceran &amp; Grosir</p><p class="apt-d">Melayani semua skala pembelian, dari personal hingga kebutuhan bisnis besar.</p></div>
+      <div><p class="apt-t">Lokasi Strategis</p><p class="apt-d">Berlokasi di Timika, Papua, siap melayani pelanggan di wilayah sekitarnya.</p></div>
+      <div><p class="apt-t">Produk Beragam</p><p class="apt-d">Koleksi dari berbagai merek dan jenis cokelat pilihan terpercaya.</p></div>
+      <div><p class="apt-t">Pemesanan Mudah</p><p class="apt-d">Konsultasi dan pemesanan langsung via WhatsApp, cepat dan praktis.</p></div>
+    </div>
+  </div>
+</div></div>
+</section>
+
+<!-- PRODUCTS -->
+<section id="products" class="sec">
+<div class="wrap">
+  <div class="phdr rv">
+    <div><span class="lbl">Katalog Produk</span><h2 class="ph2">Koleksi Cokelat Pilihan</h2></div>
+    <div class="fbar">
+      <button class="fbtn on" data-f="all">Semua</button>
+      <button class="fbtn" data-f="dark">Dark Chocolate</button>
+      <button class="fbtn" data-f="milk">Milk Chocolate</button>
+      <button class="fbtn" data-f="white">White Chocolate</button>
+      <button class="fbtn" data-f="gift">Gift &amp; Hampers</button>
+    </div>
+  </div>
+  <div id="pg"></div>
+</div>
+</section>
+
+<!-- WHOLESALE -->
+<section id="wholesale" class="sec">
+<div class="wrap">
+  <span class="lbl lbl-d rv" style="text-align:center;display:block">Layanan Kami</span>
+  <h2 class="wh2 rv">Retail &amp; Wholesale</h2>
+  <p class="wsub rv">Kami melayani semua skala kebutuhan cokelat Anda, dari pembelian personal hingga pengadaan bisnis dalam jumlah besar.</p>
+  <div class="wgrid">
+    <div class="wc wcr rv">
+      <div class="wi wir"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#593629" stroke-width="2"><path d="M6 2 3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg></div>
+      <h3 class="wt wtr">Pembelian Eceran</h3>
+      <p class="wd wdr">Tersedia untuk Anda yang ingin menikmati cokelat premium untuk konsumsi pribadi, keluarga, atau sebagai hadiah spesial.</p>
+      <ul class="wl wlr">
+        <li><span class="wck"><svg width="10" height="10" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="#2B1712" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Berbagai pilihan produk tersedia</li>
+        <li><span class="wck"><svg width="10" height="10" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="#2B1712" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Cocok untuk hadiah dan oleh-oleh</li>
+        <li><span class="wck"><svg width="10" height="10" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="#2B1712" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Konsultasi produk via WhatsApp</li>
+      </ul>
+      <a href="#contact" class="btn btn-og">Belanja Sekarang</a>
+    </div>
+    <div class="wc wcw rv d1">
+      <div class="wi wiw"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#C79552" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2"/><line x1="12" y1="12" x2="12" y2="16"/><line x1="10" y1="14" x2="14" y2="14"/></svg></div>
+      <h3 class="wt wtw">Pembelian Grosir</h3>
+      <p class="wd wdw">Solusi pengadaan cokelat untuk toko, reseller, kafe, hotel, pelaku usaha kuliner, dan pembelian korporat dalam jumlah besar.</p>
+      <ul class="wl wlw">
+        <li><span class="wck"><svg width="10" height="10" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="#2B1712" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Tersedia untuk berbagai skala bisnis</li>
+        <li><span class="wck"><svg width="10" height="10" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="#2B1712" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Konsultasi kebutuhan secara personal</li>
+        <li><span class="wck"><svg width="10" height="10" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="#2B1712" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Pemesanan langsung via WhatsApp</li>
+        <li><span class="wck"><svg width="10" height="10" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="#2B1712" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Cocok untuk reseller &amp; distributor</li>
+      </ul>
+      <a href="#contact" class="btn btn-g">Konsultasi Grosir</a>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- WHY US -->
+<section id="why" class="sec">
+<div class="wrap">
+  <div class="why-h"><span class="lbl rv">Keunggulan</span><h2 class="wh2t rv">Mengapa Choco Store Timika?</h2><p class="ws rv">Kami berkomitmen memberikan pengalaman terbaik dalam memilih dan membeli cokelat berkualitas.</p></div>
+  <div class="wgr">
+    <div class="wi2 rv"><svg class="wico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><h3 class="wti">Produk Berkualitas</h3><p class="wde">Koleksi cokelat dari berbagai merek terpilih, tersedia dalam beragam pilihan untuk memenuhi selera dan kebutuhan Anda.</p></div>
+    <div class="wi2 rv d1"><svg class="wico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg><h3 class="wti">Layanan Eceran &amp; Grosir</h3><p class="wde">Fleksibel untuk semua kebutuhan, dari pembelian satu pcs hingga jumlah besar untuk keperluan bisnis Anda.</p></div>
+    <div class="wi2 rv d2"><svg class="wico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg><h3 class="wti">Konsultasi Mudah</h3><p class="wde">Tim kami siap membantu menemukan produk yang tepat. Konsultasi kapan saja melalui WhatsApp dengan respon cepat.</p></div>
+    <div class="wi2 rv d3"><svg class="wico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg><h3 class="wti">Pemesanan Terpercaya</h3><p class="wde">Proses pemesanan mudah dan transparan via WhatsApp, dengan kepastian ketersediaan stok sebelum Anda melakukan pembayaran.</p></div>
+  </div>
+</div>
+</section>
+
+<!-- GALLERY -->
+<section id="gallery" class="sec">
+<div class="wrap">
+  <span class="lbl lbl-d rv" style="text-align:center;display:block">Galeri</span>
+  <h2 class="gh2 rv">Koleksi &amp; Suasana</h2>
+  <p class="gsub rv">Tampilan produk dan suasana Choco Store Timika</p>
+  <div class="gg">
+    <div class="gi rv"><div class="ga" style="height:280px;background:radial-gradient(ellipse at 25% 70%,#C79552 0%,#3A211B 100%)"></div><div class="gov"><span class="gl">Produk Unggulan</span></div></div>
+    <div class="gi rv d1"><div class="ga" style="height:180px;background:linear-gradient(160deg,#593629 0%,#2B1712 100%)"></div><div class="gov"><span class="gl">Dark Chocolate Premium</span></div></div>
+    <div class="gi rv d2"><div class="ga" style="height:230px;background:radial-gradient(circle at 50% 25%,#D4A86A 0%,#593629 100%)"></div><div class="gov"><span class="gl">Koleksi Caramel</span></div></div>
+    <div class="gi rv"><div class="ga" style="height:300px;background:linear-gradient(195deg,#2B1712 0%,#8B4513 100%)"></div><div class="gov"><span class="gl">Gudang &amp; Stok</span></div></div>
+    <div class="gi rv d1"><div class="ga" style="height:190px;background:radial-gradient(ellipse at 65% 50%,#C79552 0%,#2B1712 100%)"></div><div class="gov"><span class="gl">Gift &amp; Packaging</span></div></div>
+    <div class="gi rv d2"><div class="ga" style="height:220px;background:linear-gradient(135deg,#3A211B 0%,#C79552 100%)"></div><div class="gov"><span class="gl">Special Edition</span></div></div>
+  </div>
+</div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact" class="sec">
+<div class="wrap"><div class="cgrid">
+  <div>
+    <span class="lbl rv">Hubungi Kami</span>
+    <h2 class="ch2 rv">Siap Melayani Anda</h2>
+    <p class="cdesc rv">Kami siap membantu kebutuhan cokelat Anda. Hubungi kami untuk informasi produk, harga, ketersediaan, maupun pemesanan grosir.</p>
+    <div class="citems">
+      <div class="cit rv"><div class="cic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg></div><div><p class="clb">Alamat</p><p class="cv"><em>[Alamat toko akan diisi]</em><br>Timika, Papua, Indonesia</p></div></div>
+      <div class="cit rv d1"><div class="cic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 014.69 12 19.79 19.79 0 011.57 3.19 2 2 0 013.54 1h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L7.91 8.56a16 16 0 005.72 5.72l1.56-1.56a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 16.92z"/></svg></div><div><p class="clb">WhatsApp</p><p class="cv"><em>[Nomor WhatsApp akan diisi]</em></p></div></div>
+      <div class="cit rv d2"><div class="cic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div><div><p class="clb">Email</p><p class="cv"><em>[Email akan diisi]</em></p></div></div>
+      <div class="cit rv d3"><div class="cic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div><div><p class="clb">Jam Operasional</p><p class="cv"><em>[Jam operasional akan diisi]</em></p></div></div>
+    </div>
+  </div>
+  <div class="rv d1">
+    <div class="mapp">
+      <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+      <span>Google Maps akan ditampilkan di sini</span>
+      <span style="font-size:.72rem;color:rgba(247,241,232,.25)">[Tambahkan embed Google Maps Anda]</span>
+    </div>
+    <a class="wac" id="wac">
+      <svg width="42" height="42" viewBox="0 0 24 24" fill="#25D366"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+      <div><p class="wac-t">Chat WhatsApp Sekarang</p><p class="wac-s">Respon cepat untuk semua pertanyaan Anda</p></div>
+    </a>
+  </div>
+</div></div>
+</section>
+
+</main>
+
+<footer>
+<div class="wrap">
+  <div class="fg">
+    <div>
+      <div class="logo">Choco<span class="lg">Store</span><span class="ll">Timika</span></div>
+      <p class="fdesc">Toko dan gudang cokelat premium di Timika, Papua. Melayani kebutuhan eceran dan grosir untuk individu maupun pelaku bisnis.</p>
+    </div>
+    <div>
+      <p class="ftit">Navigasi</p>
+      <ul class="fl">
+        <li><a href="#home">Home</a></li><li><a href="#about">About Us</a></li>
+        <li><a href="#products">Products</a></li><li><a href="#wholesale">Wholesale</a></li>
+        <li><a href="#gallery">Gallery</a></li><li><a href="#contact">Contact</a></li>
+      </ul>
+    </div>
+    <div>
+      <p class="ftit">Kontak</p>
+      <div class="fct">
+        <span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>Timika, Papua, Indonesia</span>
+        <span style="font-style:italic;color:rgba(247,241,232,.3)">[WhatsApp akan diisi]</span>
+        <span style="font-style:italic;color:rgba(247,241,232,.3)">[Email akan diisi]</span>
+      </div>
+    </div>
+  </div>
+  <div class="fbot">
+    <p class="fcp">&copy; 2025 Choco Store Timika. All rights reserved.</p>
+    <p class="fcp">Premium Chocolate Store &amp; Wholesale · Timika, Papua</p>
+  </div>
+</div>
+</footer>
+
+<button id="btt" aria-label="Kembali ke atas">
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="18 15 12 9 6 15"/></svg>
+</button>
+
+<script>
+// ===== CONFIG (edit di sini atau di js/config.js) =====
+const C={
+  wa:'NOMOR_WA_ANDA', // Format: '6281234567890'
+  brand:'Choco Store Timika',
+  msg:'Halo Choco Store Timika, saya ingin menanyakan tentang produk cokelat Anda.'
+};
+
+// ===== PRODUCTS (edit di js/products.js) =====
+const P=[
+  {id:'p1',cat:'dark',name:'Dark Chocolate Premium',desc:'Cokelat hitam premium dengan kandungan kakao tinggi. Cocok untuk konsumsi langsung maupun bahan baking profesional.',feat:true,bg:'radial-gradient(ellipse at 25% 28%,#C79552 0%,#9B5B35 18%,#3A211B 100%)'},
+  {id:'p2',cat:'milk',name:'Milk Chocolate Selection',desc:'Koleksi cokelat susu lembut dengan cita rasa manis sempurna, tersedia dalam berbagai pilihan merek dan ukuran.',feat:false,bg:'linear-gradient(135deg,#D2691E 0%,#A0522D 60%,#2B1712 100%)'},
+  {id:'p3',cat:'white',name:'White Chocolate Delight',desc:'Cokelat putih premium dengan tekstur creamy dan aroma vanilla yang khas. Sempurna untuk kreasi kue dan dessert.',feat:false,bg:'linear-gradient(135deg,#F7DFA3 0%,#C79552 55%,#8B6914 100%)'},
+  {id:'p4',cat:'gift',name:'Premium Gift Box',desc:'Paket hadiah cokelat eksklusif dalam berbagai pilihan isi dan ukuran kemasan. Cocok untuk berbagai momen spesial.',feat:false,bg:'linear-gradient(155deg,#2B1712 0%,#593629 45%,#C79552 80%,#2B1712 100%)'},
+  {id:'p5',cat:'dark',name:'Cokelat Couverture',desc:'Cokelat couverture berkualitas tinggi untuk kebutuhan pastry profesional, tersedia dalam format keping dan blok.',feat:false,bg:'linear-gradient(135deg,#2B1712 0%,#3A211B 55%,#593629 100%)'},
+  {id:'p6',cat:'milk',name:'Cokelat Assorted Mix',desc:'Kumpulan cokelat beragam rasa dalam satu paket, ideal untuk dinikmati sendiri maupun sebagai oleh-oleh khas.',feat:false,bg:'radial-gradient(circle at 60% 60%,#C79552 0%,#593629 42%,#2B1712 100%)'},
+];
+const catMap={dark:'Dark Chocolate',milk:'Milk Chocolate',white:'White Chocolate',gift:'Gift & Hampers'};
+
+// ===== WHATSAPP =====
+function wa(prod){
+  const ph=C.wa.replace(/\D/g,'');
+  const msg=prod?`Halo ${C.brand}, saya ingin menanyakan tentang produk: *${prod}*. Mohon informasikan ketersediaan dan harganya. Terima kasih.`:C.msg;
+  window.open(`https://wa.me/${ph}?text=${encodeURIComponent(msg)}`,'_blank');
+}
+
+// ===== RENDER PRODUCTS =====
+function render(cat){
+  const list=cat==='all'?P:P.filter(p=>p.cat===cat);
+  const feat=list.find(p=>p.feat);
+  const rest=list.filter(p=>!p.feat);
+  let html='';
+  if(feat){
+    html+=`<div class="pfeat rv">
+      <div class="pi"><div class="pia" style="background:${feat.bg}"></div><span class="pbdg">Unggulan</span></div>
+      <div class="pfeat-info"><p class="pcat">${catMap[feat.cat]||feat.cat}</p><h3 class="pname">${feat.name}</h3><p class="pdesc">${feat.desc}</p>
+      <div class="pft"><span class="pp">Hubungi untuk harga</span><button class="btn btn-og" style="font-size:.8rem;padding:.55rem 1.25rem;border-radius:2px" onclick="wa('${feat.name}')">Tanya Harga</button></div>
+      </div></div>`;
+  }
+  if(rest.length){
+    html+=`<div class="pgrid">${rest.map(p=>`
+    <article class="pc rv">
+      <div class="pi"><div class="pia" style="background:${p.bg}"></div></div>
+      <div class="pinfo"><p class="pcat">${catMap[p.cat]||p.cat}</p><h3 class="pname">${p.name}</h3><p class="pdesc">${p.desc}</p>
+      <div class="pft"><span class="pp">Hubungi untuk harga</span><button class="btn btn-og" style="font-size:.78rem;padding:.5rem 1rem;border-radius:2px" onclick="wa('${p.name}')">Tanya Harga</button></div>
+      </div></article>`).join('')}</div>`;
+  } else if(!feat){
+    html='<p style="color:rgba(247,241,232,.5);text-align:center;padding:3rem 0">Tidak ada produk dalam kategori ini. Hubungi kami untuk informasi lengkap.</p>';
+  }
+  document.getElementById('pg').innerHTML=html;
+  document.querySelectorAll('#pg .rv').forEach(el=>ro.observe(el));
+}
+
+// ===== NAVIGATION =====
+const nav=document.getElementById('nav');
+const hb=document.getElementById('hb');
+const mn=document.getElementById('mn');
+const btt=document.getElementById('btt');
+
+window.addEventListener('scroll',()=>{
+  const y=window.scrollY;
+  nav.classList.toggle('sc',y>50);
+  btt.classList.toggle('sh',y>400);
+  const secs=[...document.querySelectorAll('section[id]')];
+  let cur='';
+  secs.forEach(s=>{if(y>=s.offsetTop-120)cur=s.id;});
+  document.querySelectorAll('.nl a').forEach(a=>a.classList.toggle('on',a.getAttribute('href')==='#'+cur));
+},{passive:true});
+
+hb.addEventListener('click',()=>{
+  hb.classList.toggle('op');
+  mn.classList.toggle('op');
+  document.body.style.overflow=mn.classList.contains('op')?'hidden':'';
+});
+document.querySelectorAll('.ml').forEach(a=>a.addEventListener('click',()=>{
+  hb.classList.remove('op');mn.classList.remove('op');document.body.style.overflow='';
+}));
+
+// ===== SCROLL REVEAL =====
+const ro=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');ro.unobserve(e.target);}});
+},{threshold:.12});
+document.querySelectorAll('.rv').forEach(el=>ro.observe(el));
+
+// ===== FILTER =====
+document.querySelectorAll('.fbtn').forEach(b=>b.addEventListener('click',()=>{
+  document.querySelectorAll('.fbtn').forEach(x=>x.classList.remove('on'));
+  b.classList.add('on');
+  render(b.dataset.f);
+}));
+
+// ===== BACK TO TOP =====
+btt.addEventListener('click',()=>window.scrollTo({top:0,behavior:'smooth'}));
+
+// ===== WA CTA =====
+document.getElementById('wac').addEventListener('click',()=>wa(null));
+
+// ===== INIT =====
+render('all');
+nav.classList.toggle('sc',window.scrollY>50);
+</script>
+</body>
+</html>
