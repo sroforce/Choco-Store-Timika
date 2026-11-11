@@ -1,0 +1,50 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ─── HELPER FUNCTIONS ───────────────────────────────────────────────
+    function isAdmin() {
+      return request.auth != null
+        && request.auth.token.admin == true;
+    }
+
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    // ─── PRODUCTS (Publik baca, Admin tulis) ────────────────────────────
+    match /products/{productId} {
+      allow read: if true;
+      allow create, update, delete: if isAdmin();
+    }
+
+    // ─── CONFIG (Publik baca, Admin tulis) ──────────────────────────────
+    match /config/{document} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // ─── GALLERY (Publik baca, Admin tulis) ─────────────────────────────
+    match /gallery/{itemId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // ─── CONTENT (Publik baca, Admin tulis) ─────────────────────────────
+    match /content/{document} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // ─── ADMIN LOGS (Admin only) ─────────────────────────────────────────
+    match /admin_logs/{logId} {
+      allow read, write: if isAdmin();
+    }
+
+    // ─── DEFAULT: Tolak semua akses lain ─────────────────────────────────
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
