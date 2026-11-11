@@ -20,7 +20,7 @@ const SITE_CONFIG = {
   // ─── KONTAK ───────────────────────────────────────────────────────────
   contact: {
     whatsapp:   '',             // Format: '6281234567890' (tanpa + atau spasi)
-    email:      '',             // contoh: 'hello@chocostoretimika.com'
+    email:      'franssroyer@gmail.com',             // contoh: 'hello@chocostoretimika.com'
     address:    '',             // Alamat lengkap toko
     mapsEmbed:  '',             // URL Google Maps Embed (bukan link biasa)
     mapsLink:   '',             // Link Google Maps untuk dibuka di browser
