@@ -11,7 +11,8 @@
 :root{--cc:#2B1712;--cd:#3A211B;--cg:#C79552;--cr:#F7F1E8;--cbe:#E8DCCB;--err:#E05B5B;--ok:#4CAF50;--ff:'Plus Jakarta Sans',system-ui,sans-serif}
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:var(--ff);background:#F5F5F5;color:#333;min-height:100vh;display:flex}
-/* LOGIN */
+
+/* LOGIN SCREEN */
 #loginScreen{position:fixed;inset:0;background:var(--cc);display:flex;align-items:center;justify-content:center;z-index:100}
 .login-box{background:var(--cd);border:1px solid rgba(199,149,82,.2);border-radius:8px;padding:3rem;width:100%;max-width:400px}
 .login-logo{font-family:'Plus Jakarta Sans',sans-serif;font-size:1.3rem;font-weight:700;color:var(--cr);margin-bottom:.25rem}
@@ -20,9 +21,18 @@ body{font-family:var(--ff);background:#F5F5F5;color:#333;min-height:100vh;displa
 .login-box label{display:block;font-size:.75rem;font-weight:600;color:rgba(247,241,232,.6);margin-bottom:.4rem;letter-spacing:.08em;text-transform:uppercase}
 .login-box input{width:100%;padding:.75rem 1rem;background:rgba(43,23,18,.5);border:1px solid rgba(199,149,82,.2);border-radius:4px;color:var(--cr);font-family:var(--ff);font-size:.92rem;margin-bottom:1.25rem;transition:border-color .2s}
 .login-box input:focus{outline:none;border-color:var(--cg)}
-.login-btn{width:100%;padding:.85rem;background:var(--cg);color:var(--cc);border:none;border-radius:4px;font-family:var(--ff);font-size:.92rem;font-weight:700;cursor:pointer;transition:all .2s}
-.login-btn:hover{background:#D4A86A}
-.login-err{font-size:.82rem;color:var(--err);margin-top:.75rem;display:none}
+.login-box input:disabled{opacity:.5;cursor:not-allowed}
+.login-btn{width:100%;padding:.85rem;background:var(--cg);color:var(--cc);border:none;border-radius:4px;font-family:var(--ff);font-size:.92rem;font-weight:700;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:.5rem}
+.login-btn:hover:not(:disabled){background:#D4A86A}
+.login-btn:disabled{opacity:.65;cursor:not-allowed}
+.login-err{font-size:.82rem;color:var(--err);margin-top:.75rem;display:none;line-height:1.5}
+
+/* Auth checking state */
+#authCheck{text-align:center;padding:1.5rem 0}
+.auth-spin{display:inline-block;width:28px;height:28px;border:2.5px solid rgba(199,149,82,.25);border-top-color:var(--cg);border-radius:50%;animation:spin .9s linear infinite;margin-bottom:.75rem}
+@keyframes spin{to{transform:rotate(360deg)}}
+.auth-check-text{color:rgba(247,241,232,.5);font-size:.85rem}
+
 /* SIDEBAR */
 .sidebar{width:260px;background:var(--cc);min-height:100vh;flex-shrink:0;display:flex;flex-direction:column;padding:2rem 0}
 .sb-logo{padding:0 1.5rem 2rem;font-size:1.1rem;font-weight:700;color:var(--cr)}
@@ -34,20 +44,24 @@ body{font-family:var(--ff);background:#F5F5F5;color:#333;min-height:100vh;displa
 .sb-footer{padding:1.5rem;border-top:1px solid rgba(199,149,82,.12)}
 .sb-logout{display:flex;align-items:center;gap:.5rem;color:rgba(247,241,232,.4);font-size:.82rem;cursor:pointer;transition:color .2s}
 .sb-logout:hover{color:var(--cr)}
+
 /* MAIN */
 .admin-main{flex:1;display:flex;flex-direction:column;min-height:100vh}
 .admin-header{background:#fff;border-bottom:1px solid #E8E8E8;padding:1.25rem 2rem;display:flex;align-items:center;justify-content:space-between}
 .admin-title{font-size:1.1rem;font-weight:700;color:#333}
 .admin-content{padding:2rem;flex:1}
+
 /* PANELS */
 .panel{display:none}.panel.on{display:block}
 .panel-title{font-size:1.3rem;font-weight:700;margin-bottom:2rem;color:#333}
+
 /* CARDS */
 .stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1.25rem;margin-bottom:2rem}
 .stat-card{background:#fff;border-radius:8px;padding:1.5rem;border:1px solid #E8E8E8}
 .stat-label{font-size:.75rem;font-weight:600;color:#999;text-transform:uppercase;letter-spacing:.1em;margin-bottom:.5rem}
 .stat-value{font-size:2rem;font-weight:700;color:#333}
 .stat-note{font-size:.78rem;color:#999;margin-top:.25rem}
+
 /* TABLE */
 .table-wrap{background:#fff;border-radius:8px;border:1px solid #E8E8E8;overflow:hidden}
 .table-head{padding:1.25rem 1.5rem;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #E8E8E8}
@@ -63,6 +77,7 @@ tr:last-child td{border-bottom:none}
 .badge-cat{background:rgba(43,23,18,.08);color:var(--cc)}
 .action-btn{padding:.35rem .75rem;border-radius:3px;font-size:.78rem;font-weight:600;cursor:pointer;border:none}
 .btn-edit{background:#EEF2FF;color:#3949AB}.btn-del{background:#FFEBEE;color:#C62828}
+
 /* FORM */
 .form-grid{display:grid;gap:1.25rem;max-width:640px}
 .form-group{display:flex;flex-direction:column;gap:.4rem}
@@ -75,48 +90,70 @@ tr:last-child td{border-bottom:none}
 .form-actions{display:flex;gap:.75rem;margin-top:.5rem}
 .btn-save{padding:.8rem 2rem;background:var(--cg);color:var(--cc);border:none;border-radius:4px;font-family:var(--ff);font-weight:700;cursor:pointer}
 .btn-cancel{padding:.8rem 2rem;background:#EEE;color:#555;border:none;border-radius:4px;font-family:var(--ff);font-weight:600;cursor:pointer}
+
 /* NOTICE */
-.firebase-notice{background:#FFF8E1;border:1px solid #FFC107;border-radius:8px;padding:1.25rem 1.5rem;margin-bottom:2rem;font-size:.88rem;color:#795548}
+.firebase-notice{background:#F0FFF4;border:1px solid #A5D6A7;border-radius:8px;padding:1.25rem 1.5rem;margin-bottom:2rem;font-size:.88rem;color:#2E7D32}
 .firebase-notice strong{display:block;margin-bottom:.35rem}
+.firebase-notice-warn{background:#FFF8E1;border:1px solid #FFC107;border-radius:8px;padding:1.25rem 1.5rem;margin-bottom:2rem;font-size:.88rem;color:#795548}
+
 /* RESPONSIVE */
 @media(max-width:768px){.sidebar{display:none}.admin-main{width:100%}}
 </style>
 </head>
 <body>
 
-<!-- LOGIN SCREEN -->
+<!-- ═══════════════════════════════════════════════════════════
+     LOGIN SCREEN
+     Ditampilkan saat loading dan saat user belum/tidak login.
+     ════════════════════════════════════════════════════════════ -->
 <div id="loginScreen">
   <div class="login-box">
     <p class="login-logo">Choco<span>Store</span> Admin</p>
     <p class="login-sub">Dashboard Administrator — Choco Store Timika</p>
-    <div>
-      <label>Email</label>
-      <input type="email" id="loginEmail" placeholder="admin@email.com">
-      <label>Password</label>
-      <input type="password" id="loginPassword" placeholder="••••••••">
-      <button class="login-btn" onclick="doLogin()">Masuk ke Dashboard</button>
-      <p class="login-err" id="loginErr">Email atau password salah.</p>
+
+    <!-- State 1: Mengecek sesi (muncul saat halaman pertama dibuka) -->
+    <div id="authCheck">
+      <div class="auth-spin"></div>
+      <p class="auth-check-text">Memverifikasi sesi...</p>
     </div>
+
+    <!-- State 2: Form login (muncul setelah sesi dicek, jika belum login) -->
+    <div id="loginForm" style="display:none">
+      <label for="loginEmail">Email</label>
+      <input type="email" id="loginEmail" placeholder="admin@email.com" autocomplete="email">
+      <label for="loginPassword">Password</label>
+      <input type="password" id="loginPassword" placeholder="••••••••" autocomplete="current-password">
+      <button class="login-btn" id="loginBtn" onclick="doLogin()">Masuk ke Dashboard</button>
+      <p class="login-err" id="loginErr"></p>
+    </div>
+
     <p style="font-size:.72rem;color:rgba(247,241,232,.3);margin-top:1.5rem;text-align:center">
       Akses admin diverifikasi melalui Firebase Authentication
     </p>
   </div>
 </div>
 
-<!-- SIDEBAR -->
+<!-- ═══════════════════════════════════════════════════════════
+     SIDEBAR
+     ════════════════════════════════════════════════════════════ -->
 <div class="sidebar">
   <div class="sb-logo">Choco<span>Store</span></div>
   <ul class="sb-menu">
     <li><a onclick="showPanel('dashboard')" class="on">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>Dashboard</a></li>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+      Dashboard</a></li>
     <li><a onclick="showPanel('products')">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 01-2.83 0L2 12V2h10l8.59 8.59a2 2 0 010 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>Produk</a></li>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 01-2.83 0L2 12V2h10l8.59 8.59a2 2 0 010 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
+      Produk</a></li>
     <li><a onclick="showPanel('gallery')">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>Galeri</a></li>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+      Galeri</a></li>
     <li><a onclick="showPanel('content')">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>Konten</a></li>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+      Konten</a></li>
     <li><a onclick="showPanel('config')">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 01-2-2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09a1.65 1.65 0 00-1.51 1z"/></svg>Pengaturan</a></li>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+      Pengaturan</a></li>
   </ul>
   <div class="sb-footer">
     <div class="sb-logout" onclick="doLogout()">
@@ -126,7 +163,9 @@ tr:last-child td{border-bottom:none}
   </div>
 </div>
 
-<!-- MAIN CONTENT -->
+<!-- ═══════════════════════════════════════════════════════════
+     MAIN CONTENT
+     ════════════════════════════════════════════════════════════ -->
 <div class="admin-main">
   <div class="admin-header">
     <span class="admin-title" id="adminTitle">Dashboard</span>
@@ -134,12 +173,13 @@ tr:last-child td{border-bottom:none}
   </div>
   <div class="admin-content">
 
-    <div class="firebase-notice">
-      <strong>🔧 Firebase Belum Dikonfigurasi</strong>
-      Dashboard ini berjalan dalam mode demo. Hubungkan Firebase untuk mengaktifkan fungsi simpan/edit/hapus. Lihat <code>firebase/firebase-config.js</code> untuk panduan konfigurasi.
+    <!-- NOTICE: akan berubah sesuai status Firebase -->
+    <div class="firebase-notice" id="firebaseNotice">
+      <strong>✅ Firebase Authentication Aktif</strong>
+      Anda login sebagai administrator. Fitur produk, galeri, dan pengaturan memerlukan integrasi Firestore tahap berikutnya.
     </div>
 
-    <!-- DASHBOARD -->
+    <!-- ─── DASHBOARD ──────────────────────────────────────────────── -->
     <div class="panel on" id="panel-dashboard">
       <h2 class="panel-title">Dashboard</h2>
       <div class="stat-grid">
@@ -150,26 +190,34 @@ tr:last-child td{border-bottom:none}
       </div>
     </div>
 
-    <!-- PRODUCTS -->
+    <!-- ─── PRODUCTS ───────────────────────────────────────────────── -->
     <div class="panel" id="panel-products">
       <h2 class="panel-title">Manajemen Produk</h2>
+      <div class="firebase-notice-warn">
+        <strong>⚠ Koneksi Firestore belum aktif</strong>
+        Data di bawah ini adalah demo. Hubungkan Firestore untuk mengaktifkan fungsi tambah, edit, dan hapus produk.
+      </div>
       <div class="table-wrap">
         <div class="table-head"><h3>Daftar Produk</h3><button class="btn-add" onclick="showPanel('add-product')">+ Tambah Produk</button></div>
         <table>
           <thead><tr><th>Nama Produk</th><th>Kategori</th><th>Status</th><th>Unggulan</th><th>Aksi</th></tr></thead>
           <tbody>
-            <tr><td>Dark Chocolate Premium</td><td><span class="badge badge-cat">Dark</span></td><td><span class="badge badge-ok">Tersedia</span></td><td>✓</td><td><button class="action-btn btn-edit">Edit</button> <button class="action-btn btn-del">Hapus</button></td></tr>
-            <tr><td>Milk Chocolate Selection</td><td><span class="badge badge-cat">Milk</span></td><td><span class="badge badge-ok">Tersedia</span></td><td>—</td><td><button class="action-btn btn-edit">Edit</button> <button class="action-btn btn-del">Hapus</button></td></tr>
-            <tr><td>White Chocolate Delight</td><td><span class="badge badge-cat">White</span></td><td><span class="badge badge-ok">Tersedia</span></td><td>—</td><td><button class="action-btn btn-edit">Edit</button> <button class="action-btn btn-del">Hapus</button></td></tr>
-            <tr><td>Premium Gift Box</td><td><span class="badge badge-cat">Gift</span></td><td><span class="badge badge-ok">Tersedia</span></td><td>—</td><td><button class="action-btn btn-edit">Edit</button> <button class="action-btn btn-del">Hapus</button></td></tr>
+            <tr><td>Dark Chocolate Premium</td><td><span class="badge badge-cat">Dark</span></td><td><span class="badge badge-ok">Tersedia</span></td><td>✓</td><td><button class="action-btn btn-edit" onclick="alertFirestore()">Edit</button> <button class="action-btn btn-del" onclick="alertFirestore()">Hapus</button></td></tr>
+            <tr><td>Milk Chocolate Selection</td><td><span class="badge badge-cat">Milk</span></td><td><span class="badge badge-ok">Tersedia</span></td><td>—</td><td><button class="action-btn btn-edit" onclick="alertFirestore()">Edit</button> <button class="action-btn btn-del" onclick="alertFirestore()">Hapus</button></td></tr>
+            <tr><td>White Chocolate Delight</td><td><span class="badge badge-cat">White</span></td><td><span class="badge badge-ok">Tersedia</span></td><td>—</td><td><button class="action-btn btn-edit" onclick="alertFirestore()">Edit</button> <button class="action-btn btn-del" onclick="alertFirestore()">Hapus</button></td></tr>
+            <tr><td>Premium Gift Box</td><td><span class="badge badge-cat">Gift</span></td><td><span class="badge badge-ok">Tersedia</span></td><td>—</td><td><button class="action-btn btn-edit" onclick="alertFirestore()">Edit</button> <button class="action-btn btn-del" onclick="alertFirestore()">Hapus</button></td></tr>
           </tbody>
         </table>
       </div>
     </div>
 
-    <!-- ADD PRODUCT FORM -->
+    <!-- ─── ADD PRODUCT ────────────────────────────────────────────── -->
     <div class="panel" id="panel-add-product">
       <h2 class="panel-title">Tambah Produk Baru</h2>
+      <div class="firebase-notice-warn">
+        <strong>⚠ Koneksi Firestore belum aktif</strong>
+        Formulir ini belum terhubung ke database. Produk tidak akan tersimpan hingga Firestore diintegrasi.
+      </div>
       <div class="form-grid">
         <div class="form-group"><label>Nama Produk</label><input type="text" placeholder="contoh: Dark Chocolate 70%"></div>
         <div class="form-row">
@@ -185,31 +233,38 @@ tr:last-child td{border-bottom:none}
           <div class="form-group"><label>Harga (opsional)</label><input type="number" placeholder="Kosongkan jika belum ada"><p class="form-hint">Isi jika ingin harga tampil di website</p></div>
           <div class="form-group"><label>Satuan Harga</label><input type="text" placeholder="per pcs / per karton"></div>
         </div>
-        <div class="form-group"><label>Foto Produk</label><input type="file" accept="image/*"><p class="form-hint">JPG/PNG/WebP, maks 10MB. Upload ke Firebase Storage.</p></div>
+        <div class="form-group"><label>Foto Produk</label><input type="file" accept="image/*"><p class="form-hint">JPG/PNG/WebP, maks 10MB. Memerlukan Firebase Storage.</p></div>
         <div class="form-group" style="flex-direction:row;align-items:center;gap:.75rem">
           <input type="checkbox" id="featuredCheck" style="width:auto">
           <label for="featuredCheck" style="text-transform:none;letter-spacing:0;font-size:.92rem">Tampilkan sebagai Produk Unggulan</label>
         </div>
         <div class="form-actions">
-          <button class="btn-save" onclick="alert('Firebase belum dikonfigurasi. Produk belum tersimpan.')">Simpan Produk</button>
+          <button class="btn-save" onclick="alertFirestore()">Simpan Produk</button>
           <button class="btn-cancel" onclick="showPanel('products')">Batal</button>
         </div>
       </div>
     </div>
 
-    <!-- GALLERY -->
+    <!-- ─── GALLERY ────────────────────────────────────────────────── -->
     <div class="panel" id="panel-gallery">
       <h2 class="panel-title">Manajemen Galeri</h2>
-      <p style="color:#999;margin-bottom:2rem;font-size:.92rem">Upload dan atur foto produk, suasana toko, dan packaging untuk ditampilkan di halaman Gallery website.</p>
+      <div class="firebase-notice-warn">
+        <strong>⚠ Koneksi Firestore &amp; Storage belum aktif</strong>
+        Manajemen galeri memerlukan Firestore (data) dan Firebase Storage (file). Aktifkan keduanya untuk menggunakan fitur ini.
+      </div>
       <div class="table-wrap">
-        <div class="table-head"><h3>Item Galeri</h3><button class="btn-add" onclick="alert('Firebase belum dikonfigurasi.')">+ Upload Foto</button></div>
-        <p style="padding:2rem;text-align:center;color:#999;font-size:.88rem">Galeri akan aktif setelah Firebase dikonfigurasi.</p>
+        <div class="table-head"><h3>Item Galeri</h3><button class="btn-add" onclick="alertFirestore()">+ Upload Foto</button></div>
+        <p style="padding:2rem;text-align:center;color:#999;font-size:.88rem">Galeri akan aktif setelah Firestore dan Storage dikonfigurasi.</p>
       </div>
     </div>
 
-    <!-- CONTENT -->
+    <!-- ─── CONTENT ────────────────────────────────────────────────── -->
     <div class="panel" id="panel-content">
       <h2 class="panel-title">Manajemen Konten</h2>
+      <div class="firebase-notice-warn">
+        <strong>⚠ Koneksi Firestore belum aktif</strong>
+        Perubahan konten belum akan tersimpan ke database.
+      </div>
       <div class="form-grid">
         <h3 style="font-size:1rem;font-weight:700;color:#555;border-bottom:1px solid #EEE;padding-bottom:.75rem">Hero Section</h3>
         <div class="form-group"><label>Headline</label><input type="text" value="Discover Your Chocolate Experience."></div>
@@ -217,14 +272,18 @@ tr:last-child td{border-bottom:none}
         <h3 style="font-size:1rem;font-weight:700;color:#555;border-bottom:1px solid #EEE;padding-bottom:.75rem;margin-top:.5rem">About Section</h3>
         <div class="form-group"><label>Foto Toko/Gudang</label><input type="file" accept="image/*"><p class="form-hint">Foto tampil di bagian About Us</p></div>
         <div class="form-actions">
-          <button class="btn-save" onclick="alert('Firebase belum dikonfigurasi. Perubahan belum tersimpan.')">Simpan Perubahan</button>
+          <button class="btn-save" onclick="alertFirestore()">Simpan Perubahan</button>
         </div>
       </div>
     </div>
 
-    <!-- SETTINGS -->
+    <!-- ─── SETTINGS ───────────────────────────────────────────────── -->
     <div class="panel" id="panel-config">
       <h2 class="panel-title">Pengaturan</h2>
+      <div class="firebase-notice-warn">
+        <strong>⚠ Koneksi Firestore belum aktif</strong>
+        Pengaturan belum akan tersimpan ke database.
+      </div>
       <div class="form-grid">
         <h3 style="font-size:1rem;font-weight:700;color:#555;border-bottom:1px solid #EEE;padding-bottom:.75rem">Informasi Kontak</h3>
         <div class="form-group"><label>Nomor WhatsApp</label><input type="tel" placeholder="6281234567890"><p class="form-hint">Format: 62 + nomor tanpa 0 di depan</p></div>
@@ -237,47 +296,218 @@ tr:last-child td{border-bottom:none}
           <div class="form-group"><label>Sabtu–Minggu</label><input type="text" placeholder="09.00–18.00"></div>
         </div>
         <div class="form-actions">
-          <button class="btn-save" onclick="alert('Firebase belum dikonfigurasi.')">Simpan Pengaturan</button>
+          <button class="btn-save" onclick="alertFirestore()">Simpan Pengaturan</button>
         </div>
       </div>
     </div>
 
-  </div>
-</div>
+  </div><!-- /admin-content -->
+</div><!-- /admin-main -->
 
-<script>
-const titles={dashboard:'Dashboard',products:'Manajemen Produk','add-product':'Tambah Produk',gallery:'Galeri',content:'Konten',config:'Pengaturan'};
 
-function showPanel(id){
-  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('on'));
-  document.querySelectorAll('.sb-menu a').forEach(a=>a.classList.remove('on'));
-  const p=document.getElementById('panel-'+id);
-  if(p){p.classList.add('on');document.getElementById('adminTitle').textContent=titles[id]||id;}
-  const link=[...document.querySelectorAll('.sb-menu a')].find(a=>a.getAttribute('onclick')===`showPanel('${id}')`);
-  if(link)link.classList.add('on');
-}
+<!-- ═══════════════════════════════════════════════════════════
+     FIREBASE AUTHENTICATION — Script Module
+     Menggunakan Firebase SDK 10.12.2 (sama dengan firebase-config.js)
+     ════════════════════════════════════════════════════════════ -->
+<script type="module">
 
-function doLogin(){
-  const e=document.getElementById('loginEmail').value;
-  const p=document.getElementById('loginPassword').value;
-  const err=document.getElementById('loginErr');
-  if(!e||!p){err.style.display='block';err.textContent='Isi email dan password.';return;}
-  // Placeholder: ganti dengan Firebase Auth
-  if(e==='admin@demo.com'&&p==='demo1234'){
-    document.getElementById('loginScreen').style.display='none';
-  } else {
-    err.style.display='block';
-    err.textContent='Email atau password salah. (Demo: admin@demo.com / demo1234)';
+  // ── Import Firebase Auth SDK (versi sama persis dengan firebase-config.js) ──
+  import { auth } from './firebase-config.js';
+  import {
+    signInWithEmailAndPassword,
+    signOut,
+    onAuthStateChanged
+  } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
+
+  // ── Konfigurasi Administrator ─────────────────────────────────────────────
+  // UID ini divalidasi di dua tempat: frontend (UX) dan Firestore Rules (keamanan nyata).
+  const ADMIN_UID = 'eHVsfeGtEaXpGy1ARzW79uLmHJt1';
+
+  // ── Referensi elemen DOM ──────────────────────────────────────────────────
+  const loginScreen  = document.getElementById('loginScreen');
+  const authCheck    = document.getElementById('authCheck');
+  const loginForm    = document.getElementById('loginForm');
+  const loginBtn     = document.getElementById('loginBtn');
+  const loginErr     = document.getElementById('loginErr');
+  const loginEmail   = document.getElementById('loginEmail');
+  const loginPass    = document.getElementById('loginPassword');
+
+  // ── Timeout fallback: jika Firebase gagal merespons dalam 8 detik ─────────
+  const authTimeout = setTimeout(() => {
+    authCheck.style.display = 'none';
+    loginForm.style.display = 'block';
+    showError('Koneksi bermasalah. Periksa koneksi internet Anda, lalu muat ulang halaman.');
+  }, 8000);
+
+  // ── Monitor status autentikasi (dijalankan setiap kali halaman dibuka) ────
+  // Ini adalah satu-satunya pintu masuk ke dashboard. UI tidak bisa dimanipulasi
+  // untuk melewati pemeriksaan ini — keamanan sebenarnya ada di Firestore Rules.
+  onAuthStateChanged(auth, async (user) => {
+    clearTimeout(authTimeout);
+    authCheck.style.display = 'none';
+
+    if (user && user.uid === ADMIN_UID) {
+      // ✅ Login valid sebagai administrator
+      loginScreen.style.display = 'none';
+      loginForm.style.display = 'block';    // Reset tampilan untuk sesi berikutnya
+      resetLoginUI();
+
+    } else if (user) {
+      // ⛔ Login ke Firebase berhasil, tapi bukan administrator
+      // Langsung akhiri sesi — jangan biarkan akun non-admin terdeteksi
+      await signOut(auth);
+      loginForm.style.display = 'block';
+      loginScreen.style.display = 'flex';
+      showError('Akses ditolak. Akun ini tidak memiliki izin administrator.');
+
+    } else {
+      // 🔒 Belum login — tampilkan form login
+      loginForm.style.display = 'block';
+      loginScreen.style.display = 'flex';
+    }
+  });
+
+  // ── Fungsi Login ─────────────────────────────────────────────────────────
+  async function doLogin() {
+    const email    = loginEmail.value.trim();
+    const password = loginPass.value;
+
+    // Validasi input
+    if (!email || !password) {
+      showError('Isi email dan password terlebih dahulu.');
+      return;
+    }
+    if (!email.includes('@')) {
+      showError('Format email tidak valid.');
+      return;
+    }
+
+    // Set state loading — cegah klik ganda
+    setLoginLoading(true);
+    hideError();
+
+    try {
+      const credential = await signInWithEmailAndPassword(auth, email, password);
+
+      // Pengecekan UID langsung di sini (selain di onAuthStateChanged)
+      // untuk memberi feedback error yang lebih cepat
+      if (credential.user.uid !== ADMIN_UID) {
+        await signOut(auth);
+        setLoginLoading(false);
+        showError('Akses ditolak. Akun ini tidak memiliki izin administrator.');
+        return;
+      }
+
+      // Jika UID cocok, onAuthStateChanged() akan handle transisi ke dashboard.
+      // Tombol login tetap disabled hingga transisi selesai.
+
+    } catch (error) {
+      setLoginLoading(false);
+      showError(getFriendlyError(error.code));
+    }
   }
-}
 
-function doLogout(){
-  document.getElementById('loginScreen').style.display='flex';
-  document.getElementById('loginEmail').value='';
-  document.getElementById('loginPassword').value='';
-}
+  // ── Fungsi Logout ─────────────────────────────────────────────────────────
+  async function doLogout() {
+    try {
+      await signOut(auth);
+      // onAuthStateChanged() akan otomatis menampilkan loginScreen
+      loginEmail.value = '';
+      loginPass.value  = '';
+      hideError();
+    } catch (error) {
+      // Logout gagal — sangat jarang, tapi tangani dengan baik
+      console.error('Logout error:', error.message);
+      // Paksa reload sebagai fallback
+      window.location.reload();
+    }
+  }
 
-document.addEventListener('keydown',e=>{if(e.key==='Enter')doLogin();});
+  // ── Navigasi Panel ─────────────────────────────────────────────────────────
+  const panelTitles = {
+    dashboard:     'Dashboard',
+    products:      'Manajemen Produk',
+    'add-product': 'Tambah Produk',
+    gallery:       'Galeri',
+    content:       'Konten',
+    config:        'Pengaturan',
+  };
+
+  function showPanel(id) {
+    document.querySelectorAll('.panel').forEach(p => p.classList.remove('on'));
+    document.querySelectorAll('.sb-menu a').forEach(a => a.classList.remove('on'));
+
+    const panel = document.getElementById('panel-' + id);
+    if (panel) {
+      panel.classList.add('on');
+      document.getElementById('adminTitle').textContent = panelTitles[id] || id;
+    }
+
+    const activeLink = [...document.querySelectorAll('.sb-menu a')]
+      .find(a => a.getAttribute('onclick') === `showPanel('${id}')`);
+    if (activeLink) activeLink.classList.add('on');
+  }
+
+  // ── Placeholder untuk fitur Firestore (tahap berikutnya) ──────────────────
+  function alertFirestore() {
+    alert('Fitur ini memerlukan integrasi Firestore.\nAktifkan koneksi Firestore untuk menggunakan fungsi tambah, edit, dan hapus data.');
+  }
+
+  // ── Helper: Pesan error yang ramah (tanpa informasi teknis sensitif) ───────
+  function getFriendlyError(code) {
+    const errorMap = {
+      'auth/invalid-email':          'Format email tidak valid.',
+      'auth/user-not-found':         'Email atau password salah.',
+      'auth/wrong-password':         'Email atau password salah.',
+      'auth/invalid-credential':     'Email atau password salah.',
+      'auth/too-many-requests':      'Terlalu banyak percobaan gagal. Coba lagi beberapa menit lagi atau reset password Anda.',
+      'auth/network-request-failed': 'Koneksi bermasalah. Periksa koneksi internet Anda.',
+      'auth/user-disabled':          'Akun ini telah dinonaktifkan. Hubungi administrator.',
+      'auth/operation-not-allowed':  'Metode login ini tidak diizinkan. Periksa konfigurasi Firebase.',
+    };
+    // Gunakan pesan umum untuk error yang tidak dikenal (tidak bocorkan detail teknis)
+    return errorMap[code] || 'Terjadi kesalahan saat login. Silakan coba lagi.';
+  }
+
+  // ── Helper: Tampil/sembunyikan error ──────────────────────────────────────
+  function showError(msg) {
+    loginErr.textContent = msg;
+    loginErr.style.display = 'block';
+  }
+
+  function hideError() {
+    loginErr.style.display = 'none';
+    loginErr.textContent   = '';
+  }
+
+  // ── Helper: Toggle loading state tombol login ─────────────────────────────
+  function setLoginLoading(isLoading) {
+    loginBtn.disabled     = isLoading;
+    loginEmail.disabled   = isLoading;
+    loginPass.disabled    = isLoading;
+    loginBtn.textContent  = isLoading ? 'Memverifikasi...' : 'Masuk ke Dashboard';
+  }
+
+  // ── Helper: Reset UI login ke kondisi awal ────────────────────────────────
+  function resetLoginUI() {
+    setLoginLoading(false);
+    hideError();
+  }
+
+  // ── Keyboard: Enter untuk submit form ────────────────────────────────────
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' && loginForm.style.display !== 'none') {
+      doLogin();
+    }
+  });
+
+  // ── Expose ke window agar onclick HTML dapat memanggil fungsi-fungsi ini ──
+  // WAJIB karena <script type="module"> punya scope tersendiri.
+  window.doLogin       = doLogin;
+  window.doLogout      = doLogout;
+  window.showPanel     = showPanel;
+  window.alertFirestore = alertFirestore;
+
 </script>
 </body>
 </html>
