@@ -451,6 +451,7 @@ const C={
   brand:'Choco Store Timika',
   msg:'Halo Choco Store Timika, saya ingin menanyakan tentang produk cokelat Anda.'
 };
+window.C=C; // expose untuk firestore-public.js
 
 // ===== PRODUCTS (edit di js/products.js) =====
 const P=[
@@ -465,14 +466,15 @@ const catMap={dark:'Dark Chocolate',milk:'Milk Chocolate',white:'White Chocolate
 
 // ===== WHATSAPP =====
 function wa(prod){
-  const ph=C.wa.replace(/\D/g,'');
+  const ph=(window.C||C).wa.replace(/\D/g,'');
   const msg=prod?`Halo ${C.brand}, saya ingin menanyakan tentang produk: *${prod}*. Mohon informasikan ketersediaan dan harganya. Terima kasih.`:C.msg;
   window.open(`https://wa.me/${ph}?text=${encodeURIComponent(msg)}`,'_blank');
 }
 
 // ===== RENDER PRODUCTS =====
 function render(cat){
-  const list=cat==='all'?P:P.filter(p=>p.cat===cat);
+  const src=window._CST_PRODUCTS||P;
+  const list=cat==='all'?src:src.filter(p=>p.cat===cat);
   const feat=list.find(p=>p.feat);
   const rest=list.filter(p=>!p.feat);
   let html='';
@@ -545,5 +547,7 @@ document.getElementById('wac').addEventListener('click',()=>wa(null));
 render('all');
 nav.classList.toggle('sc',window.scrollY>50);
 </script>
+<!-- Firebase Firestore: memuat config & produk dari database -->
+<script type="module" src="./js/firestore-public.js"></script>
 </body>
 </html>
