@@ -325,6 +325,91 @@ tr:last-child td{border-bottom:none}
 </div><!-- /admin-main -->
 
 
+<!-- ═══════════════════════════════════════════════════════════
+     FALLBACK SCRIPT — Non-module, berjalan terlepas dari status module loading.
+     Menangani kasus: js/admin-firestore.js tidak ditemukan atau CDN import gagal.
+     Root cause umum: file tidak di-push ke GitHub, atau timeout jaringan.
+     ════════════════════════════════════════════════════════════ -->
+<script>
+(function() {
+  'use strict';
+
+  // Flag yang di-set oleh admin-firestore.js saat berhasil dimuat
+  window.__CST_MODULE_LOADED = false;
+  window.__CST_AUTH_FIRED    = false;
+
+  // Timeout HARD (15 detik) — sepenuhnya independen dari module
+  // Ini satu-satunya proteksi jika module script tidak pernah berjalan
+  var HARD_TIMEOUT = 15000;
+  var hardTimer = setTimeout(function() {
+
+    // Hanya jalankan jika auth belum selesai
+    if (window.__CST_AUTH_FIRED) return;
+
+    var ac  = document.getElementById('authCheck');
+    var lf  = document.getElementById('loginForm');
+    var err = document.getElementById('loginErr');
+
+    if (ac) ac.style.display = 'none';
+    if (lf) lf.style.display = 'block';
+
+    var msg;
+    if (!window.__CST_MODULE_LOADED) {
+      // Module tidak pernah load — kemungkinan 404 atau CDN down
+      msg = '⚠ Gagal memuat sistem autentikasi (file tidak ditemukan atau koneksi terputus).\n\n' +
+            'Langkah diagnosa:\n' +
+            '1. Buka browser DevTools → F12 → tab Console\n' +
+            '2. Periksa apakah ada error "Failed to fetch" atau "404"\n' +
+            '3. Pastikan file js/admin-firestore.js sudah di-push ke GitHub\n' +
+            '4. Muat ulang halaman (Ctrl+Shift+R / Cmd+Shift+R)';
+    } else {
+      // Module load, tapi onAuthStateChanged tidak pernah merespons
+      msg = '⚠ Firebase Authentication tidak merespons (timeout 15 detik).\n\n' +
+            'Langkah diagnosa:\n' +
+            '1. Buka browser DevTools → F12 → tab Console\n' +
+            '2. Periksa error "[CST Auth]" di console\n' +
+            '3. Pastikan Authorized Domains di Firebase Console sudah benar\n' +
+            '4. Muat ulang halaman untuk mencoba lagi';
+    }
+
+    if (err) {
+      err.style.whiteSpace = 'pre-line';
+      err.textContent = msg;
+      err.style.display = 'block';
+    }
+
+  }, HARD_TIMEOUT);
+
+  // Fungsi yang dipanggil admin-firestore.js saat module berhasil dimuat
+  window.__CST_ON_MODULE_READY = function() {
+    window.__CST_MODULE_LOADED = true;
+    console.log('[CST Fallback] ✅ Module berhasil dimuat. Hard timer masih berjalan...');
+  };
+
+  // Fungsi yang dipanggil admin-firestore.js saat onAuthStateChanged berhasil fired
+  window.__CST_ON_AUTH_READY = function() {
+    window.__CST_AUTH_FIRED = true;
+    clearTimeout(hardTimer);
+    console.log('[CST Fallback] ✅ Auth selesai. Hard timer dibersihkan.');
+  };
+
+  // Global error handler — tangkap error dari module script
+  window.addEventListener('error', function(ev) {
+    var src = ev.filename || '';
+    if (src.includes('admin-firestore') || src.includes('firebase-config') || src.includes('firebase')) {
+      console.error('[CST Script Error]', ev.message, '|', src, 'baris', ev.lineno);
+    }
+  });
+
+  // Tangkap Promise rejection yang tidak ditangani
+  window.addEventListener('unhandledrejection', function(ev) {
+    console.error('[CST Promise Error]', ev.reason);
+  });
+
+  console.log('[CST Fallback] Hard timeout (15s) didaftarkan. Menunggu module...');
+})();
+</script>
+
 <script type="module" src="./js/admin-firestore.js"></script>
 </body>
 </html>
