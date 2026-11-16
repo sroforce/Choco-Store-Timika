@@ -1,7 +1,6 @@
 /**
  * CHOCO STORE TIMIKA — Admin Firestore Module
- * Menangani: Firebase Auth, Settings CRUD, Products CRUD, Content, Gallery
- * Import path dari admin-index.html (root level) → firebase-config.js di root
+ * FIX: Module-ready signal, diagnostic logging, null-safe DOM, error handling
  */
 
 import { auth, db } from '../firebase-config.js';
@@ -9,6 +8,19 @@ import { signInWithEmailAndPassword, signOut, onAuthStateChanged }
   from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
 import { doc, getDoc, setDoc, collection, getDocs, addDoc, updateDoc, deleteDoc, query, orderBy, serverTimestamp }
   from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
+
+// ═══════════════════════════════════════════════════════
+//  FIX #1 — Sinyal ke HTML bahwa module berhasil dimuat
+//  Harus jalan PERTAMA, sebelum kode lain
+// ═══════════════════════════════════════════════════════
+(function signalModuleLoaded() {
+  if (typeof window.__CST_ON_MODULE_READY === 'function') {
+    window.__CST_ON_MODULE_READY();
+  }
+  console.group('[CST Admin] Module dimuat');
+  console.log('firebase-config.js:', auth ? '✅' : '❌', '| auth:', !!auth, '| db:', !!db);
+  console.groupEnd();
+})();
 
 // ═══════════════════════════════════════════════════════
 //  CONSTANTS
@@ -27,9 +39,9 @@ const CAT_LABEL = {
 };
 
 // ═══════════════════════════════════════════════════════
-//  DOM UTILITIES
+//  DOM UTILITIES — FIX #2: null-safe selectors
 // ═══════════════════════════════════════════════════════
-const $ = id => document.getElementById(id);
+const $  = id => document.getElementById(id);
 const gv = id => ($( id)?.value || '').trim();
 const sv = (id, v) => { const e = $(id); if (e) e.value = v ?? ''; };
 const gc = id => $(id)?.checked ?? false;
@@ -61,8 +73,10 @@ async function withBtn(btnId, label, fn) {
 }
 
 // ═══════════════════════════════════════════════════════
-//  FIREBASE AUTHENTICATION
+//  FIREBASE AUTHENTICATION — FIX #3: Diagnostic logging
 // ═══════════════════════════════════════════════════════
+
+// FIX #4: DOM refs dicek null-safe — tidak akan throw jika elemen tidak ada
 const $ls  = $('loginScreen');
 const $ac  = $('authCheck');
 const $lf  = $('loginForm');
@@ -71,57 +85,120 @@ const $le  = $('loginEmail');
 const $lp  = $('loginPassword');
 const $err = $('loginErr');
 
-// Timeout fallback untuk koneksi lambat / gagal
+console.log('[CST Auth] DOM refs:',
+  'loginScreen:', !!$ls,
+  'authCheck:', !!$ac,
+  'loginForm:', !!$lf,
+  'loginBtn:', !!$lb
+);
+
+// Timeout internal (8 detik) — menangani kasus Firebase Auth lambat merespons
+// Jika modul sendiri tidak load, timeout ini tidak jalan (HTML fallback yang menangani)
 const authTmo = setTimeout(() => {
-  $ac.style.display = 'none';
-  $lf.style.display = 'block';
-  _showErr('Koneksi bermasalah. Periksa koneksi internet, lalu muat ulang halaman.');
+  console.warn('[CST Auth] ⚠ onAuthStateChanged belum merespons setelah 8 detik.');
+  if ($ac) $ac.style.display = 'none';
+  if ($lf) $lf.style.display = 'block';
+  _showErr(
+    'Firebase Auth tidak merespons. Kemungkinan koneksi terputus.\n' +
+    'Muat ulang halaman untuk mencoba lagi.'
+  );
 }, 8000);
 
-// Pemantau status auth — dijalankan setiap halaman dibuka
-onAuthStateChanged(auth, async user => {
+// FIX: Pastikan Firebase selesai init sebelum onAuthStateChanged
+// Tambahkan pengecekan bahwa auth valid
+if (!auth) {
   clearTimeout(authTmo);
-  $ac.style.display = 'none';
-  if (user && user.uid === ADMIN_UID) {
-    $ls.style.display = 'none';
-    $lf.style.display = 'block';
-    _resetAuth();
-  } else if (user) {
-    // Login berhasil tapi bukan admin — langsung paksa logout
-    await signOut(auth);
-    $lf.style.display = 'block';
-    _showErr('Akses ditolak. Akun ini bukan administrator.');
-  } else {
-    $lf.style.display = 'block';
-    $ls.style.display = 'flex';
-  }
-});
+  if ($ac) $ac.style.display = 'none';
+  if ($lf) $lf.style.display = 'block';
+  _showErr('Firebase Auth tidak terinisialisasi. Periksa firebase-config.js.');
+  console.error('[CST Auth] ❌ auth object is null/undefined');
+} else {
+  console.log('[CST Auth] Mendaftarkan onAuthStateChanged...');
 
+  onAuthStateChanged(auth, async user => {
+    // FIX: Sinyal ke HTML fallback bahwa auth callback berhasil dijalankan
+    if (typeof window.__CST_ON_AUTH_READY === 'function') {
+      window.__CST_ON_AUTH_READY();
+    }
+    clearTimeout(authTmo);
+
+    // FIX: Diagnostic log — tampilkan status di console untuk debugging
+    console.group('[CST Auth] onAuthStateChanged fired');
+    console.log('User:', user ? `UID: ${user.uid}` : 'null (tidak ada sesi)');
+    console.log('Expected UID:', ADMIN_UID);
+    console.log('UID match:', user ? user.uid === ADMIN_UID : false);
+    console.groupEnd();
+
+    if ($ac) $ac.style.display = 'none';
+
+    if (user && user.uid === ADMIN_UID) {
+      // ✅ Login valid sebagai administrator
+      console.log('[CST Auth] ✅ UID valid. Membuka dashboard...');
+      if ($ls) $ls.style.display = 'none';
+      if ($lf) $lf.style.display = 'block';
+      _resetAuth();
+
+    } else if (user) {
+      // ⛔ Login ke Firebase berhasil, tapi bukan administrator
+      console.warn('[CST Auth] ⛔ UID tidak cocok — paksa logout');
+      try { await signOut(auth); } catch (e) { console.error('signOut error:', e); }
+      if ($lf) $lf.style.display = 'block';
+      if ($ls) $ls.style.display = 'flex';
+      _showErr('Akses ditolak. Akun ini bukan administrator.');
+
+    } else {
+      // 🔒 Tidak ada sesi aktif
+      console.log('[CST Auth] Tidak ada sesi. Menampilkan form login.');
+      if ($lf) $lf.style.display = 'block';
+      if ($ls) $ls.style.display = 'flex';
+    }
+  });
+}
+
+// ─── LOGIN ─────────────────────────────────────────────────────────────────
 async function doLogin() {
-  const email = $le.value.trim(), pass = $lp.value;
+  const email = $le?.value.trim() ?? '';
+  const pass  = $lp?.value ?? '';
+
   if (!email || !pass) { _showErr('Isi email dan password terlebih dahulu.'); return; }
+
   _setAuthLoad(true); _hideErr();
+  console.log('[CST Auth] Login attempt:', email);
+
   try {
     const r = await signInWithEmailAndPassword(auth, email, pass);
+    console.log('[CST Auth] signInWithEmailAndPassword sukses. UID:', r.user.uid);
+
     if (r.user.uid !== ADMIN_UID) {
+      console.warn('[CST Auth] UID tidak cocok, logout...');
       await signOut(auth);
       _setAuthLoad(false);
       _showErr('Akses ditolak. Akun ini bukan administrator.');
     }
     // Jika UID cocok, onAuthStateChanged() menangani transisi ke dashboard
+
   } catch (e) {
+    console.error('[CST Auth] Login error:', e.code, e.message);
     _setAuthLoad(false);
     _showErr(_ferr(e.code));
   }
 }
 
+// ─── LOGOUT ────────────────────────────────────────────────────────────────
 async function doLogout() {
+  console.log('[CST Auth] Logout...');
   try {
     await signOut(auth);
-    $le.value = ''; $lp.value = ''; _hideErr();
-  } catch (e) { window.location.reload(); }
+    if ($le) $le.value = '';
+    if ($lp) $lp.value = '';
+    _hideErr();
+  } catch (e) {
+    console.error('[CST Auth] Logout error:', e);
+    window.location.reload();
+  }
 }
 
+// ─── AUTH HELPERS ──────────────────────────────────────────────────────────
 function _ferr(c) {
   return ({
     'auth/invalid-email':          'Format email tidak valid.',
@@ -133,11 +210,17 @@ function _ferr(c) {
     'auth/user-disabled':          'Akun ini telah dinonaktifkan.',
   })[c] || 'Terjadi kesalahan. Silakan coba lagi.';
 }
-function _showErr(m) { $err.textContent = m; $err.style.display = 'block'; }
-function _hideErr()  { $err.style.display = 'none'; $err.textContent = ''; }
+
+function _showErr(m)  {
+  if ($err) { $err.textContent = m; $err.style.display = 'block'; }
+}
+function _hideErr() {
+  if ($err) { $err.style.display = 'none'; $err.textContent = ''; }
+}
 function _setAuthLoad(v) {
-  [$lb, $le, $lp].forEach(e => { e.disabled = v; });
-  $lb.textContent = v ? 'Memverifikasi...' : 'Masuk ke Dashboard';
+  if ($lb) { $lb.disabled = v; $lb.textContent = v ? 'Memverifikasi...' : 'Masuk ke Dashboard'; }
+  if ($le) $le.disabled = v;
+  if ($lp) $lp.disabled = v;
 }
 function _resetAuth() { _setAuthLoad(false); _hideErr(); }
 
@@ -145,7 +228,7 @@ function _resetAuth() { _setAuthLoad(false); _hideErr(); }
 //  PANEL NAVIGATION
 // ═══════════════════════════════════════════════════════
 const PANEL_LOADERS = {
-  config:  loadSettings,
+  config:   loadSettings,
   products: loadProducts,
   content:  loadContent,
   gallery:  loadGallery,
@@ -159,7 +242,6 @@ function showPanel(id) {
   const lnk = [...document.querySelectorAll('.sb-menu a')]
     .find(a => a.getAttribute('onclick') === `showPanel('${id}')`);
   if (lnk) lnk.classList.add('on');
-  // Auto-muat data Firestore saat panel dibuka
   if (PANEL_LOADERS[id]) PANEL_LOADERS[id]();
 }
 
@@ -195,12 +277,13 @@ async function loadSettings() {
     }
     nOk('noticeConfig', 'Data berhasil dimuat dari Firestore.');
   } catch (e) {
+    console.error('[Firestore] loadSettings:', e.message);
     nWarn('noticeConfig', 'Gagal memuat pengaturan: ' + e.message);
   }
 }
 
 // ═══════════════════════════════════════════════════════
-//  SETTINGS — SAVE (per seksi)
+//  SETTINGS — SAVE
 // ═══════════════════════════════════════════════════════
 function saveContact() {
   withBtn('btnSvCt', 'Simpan Kontak', () =>
@@ -211,7 +294,6 @@ function saveContact() {
     }, { merge: true })
   );
 }
-
 function saveHours() {
   withBtn('btnSvHr', 'Simpan Jam', () =>
     setDoc(doc(db, 'config', 'hours'), {
@@ -220,7 +302,6 @@ function saveHours() {
     }, { merge: true })
   );
 }
-
 function saveBrand() {
   withBtn('btnSvBr', 'Simpan Brand', () =>
     setDoc(doc(db, 'config', 'brand'), {
@@ -229,7 +310,6 @@ function saveBrand() {
     }, { merge: true })
   );
 }
-
 function saveSeo() {
   withBtn('btnSvSe', 'Simpan SEO', () =>
     setDoc(doc(db, 'config', 'seo'), {
@@ -251,7 +331,7 @@ async function loadProducts() {
     const sn = await getDocs(query(collection(db, 'products'), orderBy('order')));
     if (sn.empty) {
       tb.innerHTML = '<tr><td colspan="5" style="text-align:center;color:#999;padding:2rem">Belum ada produk. Klik &ldquo;+ Tambah Produk&rdquo; untuk memulai.</td></tr>';
-      nOk('noticeProducts', 'Terhubung ke Firestore. Produk kosong.');
+      nOk('noticeProducts', 'Terhubung ke Firestore. Produk masih kosong.');
       return;
     }
     tb.innerHTML = sn.docs.map(d => {
@@ -270,6 +350,7 @@ async function loadProducts() {
     }).join('');
     nOk('noticeProducts', `${sn.docs.length} produk dimuat dari Firestore.`);
   } catch (e) {
+    console.error('[Firestore] loadProducts:', e.message);
     tb.innerHTML = `<tr><td colspan="5" style="color:#E05B5B;padding:1.5rem;text-align:center">Gagal memuat: ${e.message}</td></tr>`;
     nWarn('noticeProducts', 'Gagal memuat produk: ' + e.message);
   }
@@ -282,21 +363,19 @@ async function saveProduct() {
   const editId = gv('pEditId');
   const name   = gv('pName');
   const $pErr  = $('pFormErr');
-
   if (!name) {
     if ($pErr) { $pErr.textContent = 'Nama produk wajib diisi.'; $pErr.style.display = 'block'; }
     return;
   }
   if ($pErr) $pErr.style.display = 'none';
-
   const priceAmt = $('pPrice')?.value ? Number($('pPrice').value) : null;
   const data = {
     name,
-    category:    gv('pCategory')  || 'dark',
+    category:    gv('pCategory') || 'dark',
     description: gv('pDesc'),
     price: {
       amount: priceAmt,
-      unit:   gv('pUnit')  || null,
+      unit:   gv('pUnit') || null,
       label:  priceAmt ? 'Rp ' + priceAmt.toLocaleString('id-ID') : 'Hubungi untuk harga',
     },
     available: gv('pStatus') === 'true',
@@ -305,7 +384,6 @@ async function saveProduct() {
     imageUrl:  gv('pImageUrl') || null,
     updatedAt: serverTimestamp(),
   };
-
   const label = editId ? 'Update Produk' : 'Simpan Produk';
   const ok = await withBtn('saveProductBtn', label, async () => {
     if (editId) {
@@ -315,15 +393,11 @@ async function saveProduct() {
       await addDoc(collection(db, 'products'), data);
     }
   });
-
-  if (ok) {
-    clearProductForm();
-    showPanel('products');
-  }
+  if (ok) { clearProductForm(); showPanel('products'); }
 }
 
 // ═══════════════════════════════════════════════════════
-//  PRODUCTS — EDIT (pre-fill form)
+//  PRODUCTS — EDIT
 // ═══════════════════════════════════════════════════════
 async function editProduct(id) {
   try {
@@ -335,13 +409,10 @@ async function editProduct(id) {
     sv('pPrice', p.price?.amount || ''); sv('pUnit', p.price?.unit || '');
     sv('pOrder', p.order ?? ''); sv('pImageUrl', p.imageUrl || '');
     sc('pFeatured', p.featured);
-    // Update judul panel
     const t = document.querySelector('#panel-add-product .panel-title');
     if (t) t.textContent = 'Edit Produk';
     showPanel('add-product');
-  } catch (e) {
-    alert('Gagal memuat produk: ' + e.message);
-  }
+  } catch (e) { alert('Gagal memuat produk: ' + e.message); }
 }
 
 // ═══════════════════════════════════════════════════════
@@ -352,9 +423,7 @@ async function confirmDelete(id, name) {
   try {
     await deleteDoc(doc(db, 'products', id));
     loadProducts();
-  } catch (e) {
-    alert('Gagal menghapus produk: ' + e.message);
-  }
+  } catch (e) { alert('Gagal menghapus produk: ' + e.message); }
 }
 
 function clearProductForm() {
@@ -379,10 +448,10 @@ async function loadContent() {
     }
     nOk('noticeContent', 'Konten berhasil dimuat dari Firestore.');
   } catch (e) {
+    console.error('[Firestore] loadContent:', e.message);
     nWarn('noticeContent', 'Gagal memuat konten: ' + e.message);
   }
 }
-
 function saveContent() {
   withBtn('saveContentBtn', 'Simpan Perubahan', () =>
     setDoc(doc(db, 'content', 'hero'), {
@@ -393,7 +462,7 @@ function saveContent() {
 }
 
 // ═══════════════════════════════════════════════════════
-//  GALLERY — LOAD / ADD / DELETE (URL-based, no Storage)
+//  GALLERY — LOAD / ADD / DELETE
 // ═══════════════════════════════════════════════════════
 async function loadGallery() {
   nLoad('noticeGallery');
@@ -403,7 +472,7 @@ async function loadGallery() {
   try {
     const sn = await getDocs(query(collection(db, 'gallery'), orderBy('order')));
     if (sn.empty) {
-      tb.innerHTML = '<tr><td colspan="3" style="text-align:center;color:#999;padding:2rem">Belum ada item galeri. Klik &ldquo;+ Tambah URL Foto&rdquo; untuk memulai.</td></tr>';
+      tb.innerHTML = '<tr><td colspan="3" style="text-align:center;color:#999;padding:2rem">Belum ada item galeri.</td></tr>';
       nOk('noticeGallery', 'Terhubung ke Firestore. Galeri kosong.');
       return;
     }
@@ -417,47 +486,39 @@ async function loadGallery() {
     }).join('');
     nOk('noticeGallery', `${sn.docs.length} item galeri dimuat.`);
   } catch (e) {
+    console.error('[Firestore] loadGallery:', e.message);
     tb.innerHTML = `<tr><td colspan="3" style="color:#E05B5B;padding:1.5rem;text-align:center">Gagal: ${e.message}</td></tr>`;
     nWarn('noticeGallery', 'Gagal memuat galeri: ' + e.message);
   }
 }
-
 async function addGalleryItem() {
-  const url = prompt('URL foto publik\n(Google Drive, Cloudinary, Imgur, Supabase Storage, dll):');
+  const url = prompt('URL foto publik\n(Google Drive, Cloudinary, Imgur, Supabase, dll):');
   if (!url?.trim()) return;
   const caption = prompt('Keterangan foto (opsional):') || '';
   try {
     await addDoc(collection(db, 'gallery'), {
-      imageUrl: url.trim(), caption,
-      order: Date.now(), createdAt: serverTimestamp(),
+      imageUrl: url.trim(), caption, order: Date.now(), createdAt: serverTimestamp(),
     });
     loadGallery();
-  } catch (e) {
-    alert('Gagal menambahkan item galeri: ' + e.message);
-  }
+  } catch (e) { alert('Gagal menambahkan item galeri: ' + e.message); }
 }
-
 async function deleteGalleryItem(id) {
   if (!confirm('Hapus item galeri ini?')) return;
   try {
     await deleteDoc(doc(db, 'gallery', id));
     loadGallery();
-  } catch (e) {
-    alert('Gagal menghapus item galeri: ' + e.message);
-  }
+  } catch (e) { alert('Gagal menghapus item galeri: ' + e.message); }
 }
 
 // ═══════════════════════════════════════════════════════
-//  KEYBOARD SHORTCUT
+//  KEYBOARD
 // ═══════════════════════════════════════════════════════
 document.addEventListener('keydown', e => {
   if (e.key === 'Enter' && $lf && $lf.style.display !== 'none') doLogin();
 });
 
 // ═══════════════════════════════════════════════════════
-//  EXPOSE KE WINDOW
-//  WAJIB — script type="module" punya scope terpisah.
-//  Tanpa ini, onclick="..." di HTML tidak akan bekerja.
+//  EXPOSE KE WINDOW (wajib untuk onclick attributes di HTML)
 // ═══════════════════════════════════════════════════════
 Object.assign(window, {
   doLogin, doLogout, showPanel,
