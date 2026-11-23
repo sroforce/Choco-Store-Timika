@@ -472,6 +472,8 @@ function wa(prod){
 }
 
 // ===== RENDER PRODUCTS =====
+// FIX XSS: escape HTML entities sebelum dimasukkan ke innerHTML
+function escH(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#x27;');}
 function render(cat){
   const src=window._CST_PRODUCTS||P;
   const list=cat==='all'?src:src.filter(p=>p.cat===cat);
@@ -479,18 +481,19 @@ function render(cat){
   const rest=list.filter(p=>!p.feat);
   let html='';
   if(feat){
+    // FIX XSS: escH() pada semua data Firestore; JSON.stringify() pada onclick agar aman sebagai JS string
     html+=`<div class="pfeat rv">
-      <div class="pi"><div class="pia" style="background:${feat.bg}"></div><span class="pbdg">Unggulan</span></div>
-      <div class="pfeat-info"><p class="pcat">${catMap[feat.cat]||feat.cat}</p><h3 class="pname">${feat.name}</h3><p class="pdesc">${feat.desc}</p>
-      <div class="pft"><span class="pp">Hubungi untuk harga</span><button class="btn btn-og" style="font-size:.8rem;padding:.55rem 1.25rem;border-radius:2px" onclick="wa('${feat.name}')">Tanya Harga</button></div>
+      <div class="pi"><div class="pia" style="background:${escH(feat.bg)}"></div><span class="pbdg">Unggulan</span></div>
+      <div class="pfeat-info"><p class="pcat">${escH(catMap[feat.cat]||feat.cat)}</p><h3 class="pname">${escH(feat.name)}</h3><p class="pdesc">${escH(feat.desc)}</p>
+      <div class="pft"><span class="pp">${escH(feat.price||'Hubungi untuk harga')}</span><button class="btn btn-og" style="font-size:.8rem;padding:.55rem 1.25rem;border-radius:2px" onclick="wa(${JSON.stringify(feat.name)})">Tanya Harga</button></div>
       </div></div>`;
   }
   if(rest.length){
     html+=`<div class="pgrid">${rest.map(p=>`
     <article class="pc rv">
-      <div class="pi"><div class="pia" style="background:${p.bg}"></div></div>
-      <div class="pinfo"><p class="pcat">${catMap[p.cat]||p.cat}</p><h3 class="pname">${p.name}</h3><p class="pdesc">${p.desc}</p>
-      <div class="pft"><span class="pp">Hubungi untuk harga</span><button class="btn btn-og" style="font-size:.78rem;padding:.5rem 1rem;border-radius:2px" onclick="wa('${p.name}')">Tanya Harga</button></div>
+      <div class="pi"><div class="pia" style="background:${escH(p.bg)}"></div></div>
+      <div class="pinfo"><p class="pcat">${escH(catMap[p.cat]||p.cat)}</p><h3 class="pname">${escH(p.name)}</h3><p class="pdesc">${escH(p.desc)}</p>
+      <div class="pft"><span class="pp">${escH(p.price||'Hubungi untuk harga')}</span><button class="btn btn-og" style="font-size:.78rem;padding:.5rem 1rem;border-radius:2px" onclick="wa(${JSON.stringify(p.name)})">Tanya Harga</button></div>
       </div></article>`).join('')}</div>`;
   } else if(!feat){
     html='<p style="color:rgba(247,241,232,.5);text-align:center;padding:3rem 0">Tidak ada produk dalam kategori ini. Hubungi kami untuk informasi lengkap.</p>';
@@ -548,6 +551,6 @@ render('all');
 nav.classList.toggle('sc',window.scrollY>50);
 </script>
 <!-- Firebase Firestore: memuat config & produk dari database -->
-<script type="module" src="./js/firestore-public.js"></script>
+<script type="module" src="./firestore-public.js"></script>
 </body>
 </html>
