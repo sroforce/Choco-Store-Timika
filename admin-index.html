@@ -327,7 +327,7 @@ tr:last-child td{border-bottom:none}
 
 <!-- ═══════════════════════════════════════════════════════════
      FALLBACK SCRIPT — Non-module, berjalan terlepas dari status module loading.
-     Menangani kasus: js/admin-firestore.js tidak ditemukan atau CDN import gagal.
+     Menangani kasus: admin-firestore.js tidak ditemukan atau CDN import gagal.
      Root cause umum: file tidak di-push ke GitHub, atau timeout jaringan.
      ════════════════════════════════════════════════════════════ -->
 <script>
@@ -360,7 +360,7 @@ tr:last-child td{border-bottom:none}
             'Langkah diagnosa:\n' +
             '1. Buka browser DevTools → F12 → tab Console\n' +
             '2. Periksa apakah ada error "Failed to fetch" atau "404"\n' +
-            '3. Pastikan file js/admin-firestore.js sudah di-push ke GitHub\n' +
+            '3. Pastikan file admin-firestore.js sudah di-push ke GitHub (di root, bukan folder js/)\n' +
             '4. Muat ulang halaman (Ctrl+Shift+R / Cmd+Shift+R)';
     } else {
       // Module load, tapi onAuthStateChanged tidak pernah merespons
@@ -410,6 +410,6 @@ tr:last-child td{border-bottom:none}
 })();
 </script>
 
-<script type="module" src="./js/admin-firestore.js"></script>
+<script type="module" src="./admin-firestore.js"></script>
 </body>
 </html>
